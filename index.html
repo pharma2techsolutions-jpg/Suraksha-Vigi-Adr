@@ -1,295 +1,165 @@
 <!DOCTYPE html>
-<html>
+<html lang="mr">
 <head>
-<title>Suraksha Vigil Bot</title>
-
-<style>
-body{
-  margin:0;
-  font-family:Arial;
-  background:#ece5dd;
-  display:flex;
-  justify-content:center;
-}
-
-/* APP */
-.chat-app{
-  width:420px;
-  height:720px;
-  background:#efeae2;
-  display:flex;
-  flex-direction:column;
-  border-radius:12px;
-  overflow:hidden;
-  box-shadow:0 5px 25px rgba(0,0,0,0.3);
-}
-
-/* HEADER */
-.header{
-  background:#075e54;
-  color:white;
-  padding:10px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-}
-
-.header-left{
-  display:flex;
-  align-items:center;
-}
-
-.header img{
-  width:35px;
-  border-radius:50%;
-  margin-right:10px;
-}
-
-.header-icons span{
-  margin-left:15px;
-  cursor:pointer;
-  font-size:18px;
-}
-
-/* CHAT */
-.chat-box{
-  flex:1;
-  padding:10px;
-  overflow-y:auto;
-  display:flex;
-  flex-direction:column;
-}
-
-.msg{
-  max-width:75%;
-  padding:8px 12px;
-  margin:5px 0;
-  border-radius:8px;
-  font-size:14px;
-}
-
-.bot{background:#fff;align-self:flex-start;}
-.user{background:#dcf8c6;align-self:flex-end;}
-
-.time{
-  font-size:10px;
-  color:gray;
-  text-align:right;
-}
-
-/* INPUT */
-.input-area{
-  display:flex;
-  padding:8px;
-  background:#f0f0f0;
-}
-
-input{
-  flex:1;
-  padding:10px;
-  border-radius:20px;
-  border:none;
-}
-
-button{
-  margin-left:5px;
-  padding:10px;
-  border:none;
-  background:#075e54;
-  color:white;
-  border-radius:50%;
-  cursor:pointer;
-}
-
-/* OPTIONS */
-.options{
-  display:flex;
-  flex-wrap:wrap;
-  gap:5px;
-}
-
-.btn{
-  padding:6px 12px;
-  border-radius:15px;
-  border:none;
-  background:#128c7e;
-  color:white;
-  cursor:pointer;
-}
-
-/* CALL SCREEN */
-.call-screen{
-  position:absolute;
-  width:100%;
-  height:100%;
-  background:#075e54;
-  color:white;
-  display:none;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
-}
-
-.call-screen h2{margin:0;}
-</style>
+    <meta charset="UTF-8">
+    <title>Suraksha Vigil Bot</title>
+    <style>
+        body { margin: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #d3d3d3; display: flex; justify-content: center; align-items: center; height: 100vh; }
+        .chat-app { width: 380px; height: 650px; background: #efeae2; display: flex; flex-direction: column; border-radius: 15px; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
+        .header { background: #075e54; color: white; padding: 15px; display: flex; justify-content: space-between; align-items: center; }
+        .lang-switch { background: #128c7e; border: none; color: white; padding: 5px 10px; border-radius: 5px; cursor: pointer; }
+        .chat-box { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; }
+        .msg { max-width: 80%; padding: 10px; margin: 5px 0; border-radius: 10px; font-size: 14px; position: relative; }
+        .bot { background: #fff; align-self: flex-start; border-bottom-left-radius: 0; }
+        .user { background: #dcf8c6; align-self: flex-end; border-bottom-right-radius: 0; }
+        .input-area { display: flex; padding: 10px; background: #f0f0f0; }
+        input { flex: 1; padding: 10px; border-radius: 20px; border: 1px solid #ccc; outline: none; }
+        button { margin-left: 5px; background: #075e54; color: white; border: none; border-radius: 50%; width: 40px; height: 40px; cursor: pointer; }
+        .call-screen { position: absolute; width: 380px; height: 650px; background: #075e54; color: white; display: none; flex-direction: column; justify-content: center; align-items: center; z-index: 10; }
+    </style>
 </head>
-
 <body>
 
 <div class="chat-app">
-
-<div class="header">
-  <div class="header-left">
-    <img src="https://cdn-icons-png.flaticon.com/512/4712/4712109.png">
-    <div>
-      <b>Suraksha Vigil Bot</b><br>
-      <small>online</small>
+    <div class="header">
+        <div><b>Suraksha Vigil</b></div>
+        <button class="lang-switch" onclick="toggleLang()">EN/मराठी</button>
+        <span onclick="startCall()" style="cursor:pointer; font-size: 20px;">📞</span>
     </div>
-  </div>
-
-  <div class="header-icons">
-    <span onclick="startCall()">📞</span>
-  </div>
+    <div class="chat-box" id="chat"></div>
+    <div class="input-area">
+        <input id="input" placeholder="Type message...">
+        <button onclick="send()">➤</button>
+        <button onclick="startVoice()">🎤</button>
+    </div>
 </div>
 
-<div class="chat-box" id="chat"></div>
-
-<div class="input-area">
-  <input id="input" placeholder="Type message">
-  <button onclick="send()">➤</button>
-  <button onclick="startVoice()">🎤</button>
-</div>
-
-</div>
-
-<!-- CALL UI -->
 <div class="call-screen" id="callScreen">
-  <h2>📞 Voice Reporting चालू आहे</h2>
-  <p>Bot तुमच्याशी बोलत आहे...</p>
-  <button onclick="endCall()">End Call</button>
+    <h2 id="callStatus">📞 Call Active</h2>
+    <button onclick="endCall()" style="width: auto; padding: 10px 20px; border-radius: 20px; margin-top: 20px;">End Call</button>
 </div>
 
 <script>
-let step=0,data={},mode="chat";
-const chat=document.getElementById("chat");
+    let lang = 'mr'; 
+    let step = 0;
+    let mode = 'chat';
+    let userData = {};
 
-/* SIMPLE QUESTIONS */
-const q=[
-"तुम्ही कोण आहात?",
-"तुमचं गाव?",
-"रुग्णाचं नाव?",
-"वय?",
-"लिंग?",
-"कोणतं औषध?",
-"काय त्रास झाला?",
-"कधी झाला?",
-"त्रास किती होता?",
-"हॉस्पिटलला जावं लागलं का?",
-"तुमचं नाव?"
-];
+    const questions = {
+        mr: [
+            "नमस्कार, मी सुरक्षा विजील हेल्पलाईनमधून बोलत आहे. ADR रिपोर्टिंग सुरू करण्यासाठी 'हो' म्हणा.",
+            "तुमचे पूर्ण नाव सांगा.",
+            "रुग्णाचे वय सांगा.",
+            "कोणत्या औषधामुळे त्रास झाला?",
+            "तुम्हाला नेमका काय त्रास झाला?",
+            "धन्यवाद! आपला रिपोर्ट सबमिट झाला आहे."
+        ],
+        en: [
+            "Hello, I am from Suraksha Vigil helpline. Say 'Yes' to start ADR reporting.",
+            "Please tell your full name.",
+            "Please tell the patient's age.",
+            "Which medicine caused the reaction?",
+            "What exactly was the reaction?",
+            "Thank you! Your report has been submitted."
+        ]
+    };
 
-/* UI */
-function addMsg(msg,type){
-  let d=document.createElement("div");
-  d.className="msg "+type;
-  d.innerHTML=msg+`<div class="time">${new Date().toLocaleTimeString()}</div>`;
-  chat.appendChild(d);
-  chat.scrollTop=chat.scrollHeight;
-}
+    function toggleLang() {
+        lang = (lang === 'mr') ? 'en' : 'mr';
+        alert("Language switched to: " + lang.toUpperCase());
+    }
 
-/* BOT SPEAK */
-function speak(text){
-  let s=new SpeechSynthesisUtterance(text);
-  s.lang="mr-IN";
-  speechSynthesis.speak(s);
-}
+    function addMsg(text, type) {
+        const chat = document.getElementById("chat");
+        const div = document.createElement("div");
+        div.className = "msg " + type;
+        div.innerText = text;
+        chat.appendChild(div);
+        chat.scrollTop = chat.scrollHeight;
+    }
 
-/* PROCESS */
-function process(val){
-  data["s"+step]=val;
-  step++;
+    function speak(text) {
+        if (mode !== 'call') return;
+        const s = new SpeechSynthesisUtterance(text);
+        s.lang = (lang === 'mr') ? 'mr-IN' : 'en-US';
+        speechSynthesis.speak(s);
+        
+        // After speaking, wait for user input automatically in Call Mode
+        if (step < questions[lang].length - 1) {
+            s.onend = () => setTimeout(startVoice, 1000);
+        }
+    }
 
-  if(step<q.length){
-    setTimeout(()=>{
-      addMsg(q[step],"bot");
-      if(mode==="call") speak(q[step]);
-    },500);
-  }else{
-    addMsg("✅ Report Submitted","bot");
-    sendToSheet(data);
-  }
-}
+    function validate(step, input) {
+        // Smart Logic: Check if input is valid
+        if (step === 0) return input.toLowerCase().includes('ho') || input.toLowerCase().includes('yes');
+        if (step === 1) return input.length > 3; // Name must be > 3 chars
+        if (step === 2) return !isNaN(input); // Age must be number
+        return true;
+    }
 
-/* CHAT SEND */
-function send(){
-  let v=input.value.trim();
-  if(!v)return;
-  addMsg(v,"user");
-  process(v);
-  input.value="";
-}
+    function process(text) {
+        if (validate(step, text)) {
+            userData['step' + step] = text;
+            step++;
+            if (step < questions[lang].length) {
+                let nextQ = questions[lang][step];
+                addMsg(nextQ, "bot");
+                speak(nextQ);
+            } else {
+                addMsg(questions[lang][step-1], "bot"); // Done msg
+                // sendToSheet(userData); 
+            }
+        } else {
+            // Error handling
+            let errorMsg = (lang === 'mr') ? "माफ करा, कृपया पुन्हा स्पष्ट सांगा." : "Sorry, please provide a valid answer.";
+            addMsg(errorMsg, "bot");
+            speak(errorMsg);
+            // Don't increment step, ask again
+            setTimeout(() => {
+                let retryQ = questions[lang][step];
+                addMsg(retryQ, "bot");
+                speak(retryQ);
+            }, 2000);
+        }
+    }
 
-/* VOICE BUTTON */
-function startVoice(){
-  let r=new webkitSpeechRecognition();
-  r.lang="mr-IN";
-  r.start();
+    function send() {
+        const input = document.getElementById("input");
+        if (!input.value) return;
+        addMsg(input.value, "user");
+        process(input.value);
+        input.value = "";
+    }
 
-  r.onresult=e=>{
-    let text=e.results[0][0].transcript;
-    addMsg(text,"user");
-    process(text);
-  };
-}
+    function startVoice() {
+        const rec = new (window.webkitSpeechRecognition || window.SpeechRecognition)();
+        rec.lang = (lang === 'mr') ? 'mr-IN' : 'en-US';
+        rec.start();
+        rec.onresult = (e) => {
+            const text = e.results[0][0].transcript;
+            addMsg(text, "user");
+            process(text);
+        };
+    }
 
-/* CALL MODE */
-function startCall(){
-  mode="call";
-  document.getElementById("callScreen").style.display="flex";
+    function startCall() {
+        mode = 'call';
+        document.getElementById("callScreen").style.display = "flex";
+        step = 0;
+        addMsg(questions[lang][0], "bot");
+        speak(questions[lang][0]);
+    }
 
-  step=0;
-  addMsg("📞 Voice Call Started","bot");
-  addMsg(q[0],"bot");
-  speak(q[0]);
+    function endCall() {
+        mode = 'chat';
+        document.getElementById("callScreen").style.display = "none";
+        speechSynthesis.cancel();
+    }
 
-  voiceLoop();
-}
-
-function voiceLoop(){
-  if(mode!=="call") return;
-
-  let r=new webkitSpeechRecognition();
-  r.lang="mr-IN";
-  r.start();
-
-  r.onresult=e=>{
-    let text=e.results[0][0].transcript;
-    addMsg(text,"user");
-    process(text);
-
-    if(step<q.length) voiceLoop();
-  };
-}
-
-function endCall(){
-  mode="chat";
-  document.getElementById("callScreen").style.display="none";
-}
-
-/* START */
-window.onload=()=>{
-  addMsg("नमस्कार 👋 चला report करूया","bot");
-  addMsg(q[0],"bot");
-};
-
-/* SHEET */
-function sendToSheet(data){
-  fetch("YOUR_GOOGLE_SCRIPT_URL",{
-    method:"POST",
-    body:JSON.stringify(data)
-  });
-}
+    window.onload = () => {
+        addMsg(questions[lang][0], "bot");
+    };
 </script>
-
 </body>
 </html>
