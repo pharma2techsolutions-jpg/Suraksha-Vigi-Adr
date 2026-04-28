@@ -2,250 +2,277 @@
 <html lang="mr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Suraksha Vigil AI | Professional ADR Bot</title>
     <style>
-        :root { --wa-teal: #075e54; --wa-light: #dcf8c6; --wa-bg: #efeae2; --call-dark: #092e2b; }
-        * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, sans-serif; -webkit-tap-highlight-color: transparent; }
-        body, html { margin: 0; padding: 0; height: 100%; background: #cfd8dc; display: flex; justify-content: center; overflow: hidden; }
+        :root { 
+            --wa-teal: #075e54; 
+            --wa-light: #dcf8c6; 
+            --wa-bg: #efeae2; 
+            --wa-header: #075e54;
+        }
 
-        .app-container { width: 100%; max-width: 480px; height: 100dvh; background: var(--wa-bg); display: flex; flex-direction: column; position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+        * { box-sizing: border-box; font-family: 'Segoe UI', Helvetica, Arial, sans-serif; -webkit-tap-highlight-color: transparent; }
         
-        /* Header */
-        .header { background: var(--wa-teal); color: white; padding: 12px 18px; display: flex; align-items: center; justify-content: space-between; height: 65px; z-index: 10; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
-        .bot-profile { display: flex; align-items: center; gap: 12px; }
-        .avatar { width: 42px; height: 42px; border-radius: 50%; background: #fff; display: flex; align-items: center; justify-content: center; font-size: 24px; border: 1.5px solid rgba(255,255,255,0.5); }
-        .header b { font-size: 17px; letter-spacing: 0.5px; }
-        .header small { color: #cfd8dc; }
+        body, html { 
+            margin: 0; padding: 0; height: 100%; width: 100%;
+            background: #d1d7db; display: flex; justify-content: center;
+            overflow: hidden; /* Prevent body scroll */
+        }
 
-        /* Chat Window */
-        .chat-window { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; background-image: url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png'); background-attachment: fixed; }
-        .bubble { max-width: 82%; padding: 12px 16px; margin-bottom: 12px; border-radius: 15px; font-size: 15.5px; box-shadow: 0 1.5px 2px rgba(0,0,0,0.15); line-height: 1.5; position: relative; animation: fadeIn 0.3s ease; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
-        .bot-msg { background: white; align-self: flex-start; border-top-left-radius: 0; color: #333; }
-        .user-msg { background: var(--wa-light); align-self: flex-end; border-top-right-radius: 0; color: #111; }
+        .app-container { 
+            width: 100%; max-width: 500px; height: 100%; 
+            background: var(--wa-bg); display: flex; flex-direction: column; 
+            position: relative; box-shadow: 0 0 20px rgba(0,0,0,0.2);
+        }
 
-        /* Input Area */
-        .input-bar { padding: 12px; background: #f0f0f0; display: flex; align-items: center; gap: 10px; border-top: 1px solid #ddd; }
-        .text-input { flex: 1; padding: 12px 20px; border-radius: 30px; border: 1px solid #ccc; outline: none; font-size: 16px; background: white; }
-        .action-btn { width: 48px; height: 48px; background: var(--wa-teal); color: white; border: none; border-radius: 50%; display: flex; justify-content: center; align-items: center; cursor: pointer; font-size: 22px; transition: transform 0.2s; }
-        .action-btn:active { transform: scale(0.9); }
+        /* Header like WhatsApp */
+        .header { 
+            background: var(--wa-header); color: white; padding: 10px 16px; 
+            display: flex; align-items: center; justify-content: space-between; 
+            min-height: 60px; z-index: 100;
+        }
+        .bot-info { display: flex; align-items: center; gap: 12px; }
+        .avatar { 
+            width: 40px; height: 40px; border-radius: 50%; background: #fff; 
+            display: flex; align-items: center; justify-content: center; font-size: 22px; 
+        }
+        .header b { font-size: 17px; }
+        .header small { font-size: 12px; opacity: 0.9; }
 
-        /* Call Screen */
-        .call-screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, #092e2b, #054d44); color: white; display: none; flex-direction: column; align-items: center; z-index: 100; padding: 60px 20px; text-align: center; }
-        .call-avatar-container { position: relative; margin-bottom: 30px; }
-        .call-avatar { width: 110px; height: 110px; border-radius: 50%; background: rgba(255,255,255,0.15); display: flex; align-items: center; justify-content: center; font-size: 55px; border: 2px solid rgba(255,255,255,0.2); }
-        .listening-glow { animation: glow 1.5s infinite alternate; border-color: #25d366; }
-        @keyframes glow { from { box-shadow: 0 0 10px #25d366; } to { box-shadow: 0 0 30px #25d366; } }
+        /* Chat Area - Scroll Fix */
+        .chat-window { 
+            flex: 1; overflow-y: auto; padding: 15px; 
+            display: flex; flex-direction: column;
+            background-image: url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png');
+            background-size: contain;
+            scroll-behavior: smooth;
+        }
 
-        .call-opt-container { display: flex; gap: 12px; margin-top: 25px; flex-wrap: wrap; justify-content: center; }
-        .call-btn-opt { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.4); color: white; padding: 12px 24px; border-radius: 25px; cursor: pointer; font-size: 15px; }
+        .bubble { 
+            max-width: 85%; padding: 8px 12px; margin-bottom: 8px; 
+            border-radius: 8px; font-size: 15px; line-height: 1.4; 
+            box-shadow: 0 1px 1px rgba(0,0,0,0.1); position: relative;
+            word-wrap: break-word;
+        }
+        .bot-msg { background: white; align-self: flex-start; border-top-left-radius: 0; }
+        .user-msg { background: var(--wa-light); align-self: flex-end; border-top-right-radius: 0; }
+
+        /* Selection Buttons */
+        .option-group { display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
+        .chip { 
+            background: #fff; border: 1px solid var(--wa-teal); color: var(--wa-teal); 
+            padding: 6px 12px; border-radius: 20px; font-size: 13px; font-weight: 600; cursor: pointer;
+        }
+
+        /* Input Bar - Fix for Keyboard */
+        .input-bar { 
+            padding: 8px 12px; background: #f0f0f0; display: flex; 
+            align-items: center; gap: 8px; min-height: 60px;
+        }
+        .text-input { 
+            flex: 1; padding: 10px 15px; border-radius: 25px; 
+            border: none; outline: none; font-size: 16px; background: #fff;
+        }
+        .icon-btn { 
+            width: 45px; height: 45px; background: var(--wa-teal); 
+            color: white; border: none; border-radius: 50%; 
+            display: flex; align-items: center; justify-content: center; font-size: 20px; cursor: pointer;
+        }
+
+        /* Full Screen Call UI */
+        .call-ui { 
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
+            background: #054d44; color: white; display: none; 
+            flex-direction: column; align-items: center; z-index: 200; padding-top: 60px;
+        }
+        .call-profile { width: 120px; height: 120px; border-radius: 50%; background: rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; font-size: 60px; margin-bottom: 20px; border: 2px solid rgba(255,255,255,0.2); }
+        .pulse-ring { animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.4); } 70% { box-shadow: 0 0 0 20px rgba(37, 211, 102, 0); } 100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); } }
         
-        .dial-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 40px; }
-        .dial-key { width: 65px; height: 65px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.05); color: white; font-size: 24px; display: flex; flex-direction: column; justify-content: center; align-items: center; cursor: pointer; }
-        .dial-key span { font-size: 10px; opacity: 0.7; }
-
-        .end-call-circle { width: 75px; height: 75px; background: #ff3b30; border-radius: 50%; border: none; color: white; font-size: 35px; margin-top: auto; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+        .dial-pad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 40px; }
+        .dial-key { width: 65px; height: 65px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.3); background: rgba(255,255,255,0.1); color: white; font-size: 22px; cursor: pointer; }
+        
+        .end-btn { width: 70px; height: 70px; background: #ff3b30; border-radius: 50%; border: none; color: white; font-size: 30px; margin-top: auto; margin-bottom: 50px; cursor: pointer; }
     </style>
 </head>
 <body>
 
 <div class="app-container">
     <div class="header">
-        <div class="bot-profile">
+        <div class="bot-info">
             <div class="avatar">🛡️</div>
             <div><b>Suraksha Vigil</b><br><small>Online</small></div>
         </div>
-        <div style="display:flex; gap:20px;">
-            <span onclick="startCall()" style="cursor:pointer; font-size: 24px;">📞</span>
-        </div>
+        <div onclick="startCall()" style="cursor:pointer; font-size: 22px;">📞</div>
     </div>
 
-    <div class="chat-window" id="chat">
+    <div class="chat-window" id="chatWindow">
         <div class="bubble bot-msg">
-            <b>नमस्कार!</b> सुरक्षा विजील मध्ये आपले स्वागत आहे. <br><br>
-            रिपोर्टिंग कोणत्या भाषेत करायची आहे?
-            <div class="call-opt-container" style="justify-content: flex-start;">
-                <button class="call-btn-opt" style="color: #075e54; border-color: #075e54;" onclick="setLang('mr')">मराठी</button>
-                <button class="call-btn-opt" style="color: #075e54; border-color: #075e54;" onclick="setLang('en')">English</button>
+            नमस्कार! सुरक्षा विजील हेल्पलाईन मध्ये आपले स्वागत आहे. <br><br>
+            कोणत्या भाषेत चॅट करायला आवडेल?
+            <div class="option-group">
+                <div class="chip" onclick="initChat('mr')">मराठी</div>
+                <div class="chip" onclick="initChat('en')">English</div>
             </div>
         </div>
     </div>
 
     <div class="input-bar" id="inputArea" style="display:none;">
-        <input type="text" id="userInput" class="text-input" placeholder="येथे टाईप करा...">
-        <button class="action-btn" onclick="handleSend()">➤</button>
-        <button class="action-btn" onclick="startVoice()">🎤</button>
+        <input type="text" id="userInput" class="text-input" placeholder="मेसेज टाईप करा...">
+        <button class="icon-btn" onclick="handleInput()">➤</button>
+        <button class="icon-btn" id="voiceBtn" onclick="toggleVoice()">🎤</button>
     </div>
 
-    <div class="call-screen" id="callOverlay">
-        <div class="call-avatar-container">
-            <div class="call-avatar" id="callAvatar">🛡️</div>
-        </div>
-        <h2 id="callTitle">Helpline Active</h2>
-        <p id="callStatus" style="opacity: 0.8;">कृपया पर्याय निवडा</p>
+    <div class="call-ui" id="callUi">
+        <div class="call-profile" id="callAv">🛡️</div>
+        <h2 id="callTitle">Connecting...</h2>
+        <p id="callStatus">Please wait</p>
 
-        <div id="dialPad" class="dial-grid">
-            <button class="dial-key" onclick="pressKey(1)">1<span>Report</span></button>
-            <button class="dial-key" onclick="pressKey(2)">2<span>Info</span></button>
-            <button class="dial-key">3<span>Help</span></button>
+        <div class="dial-pad" id="dialer">
+            <button class="dial-key" onclick="pressKey(1)">1</button>
+            <button class="dial-key" onclick="pressKey(2)">2</button>
+            <button class="dial-key" onclick="pressKey(3)">3</button>
         </div>
 
-        <div id="genderBtns" class="call-opt-container" style="display:none;">
-            <button class="call-btn-opt" onclick="voiceOverride('पुरुष')">पुरुष (Male)</button>
-            <button class="call-btn-opt" onclick="voiceOverride('महिला')">महिला (Female)</button>
+        <div id="callChips" class="option-group" style="display:none; justify-content:center; padding:0 20px;">
+            <div class="chip" style="color:white; border-color:white; background:transparent;" onclick="inputOverride('पुरुष')">पुरुष (Male)</div>
+            <div class="chip" style="color:white; border-color:white; background:transparent;" onclick="inputOverride('महिला')">महिला (Female)</div>
         </div>
 
-        <button class="end-call-circle" onclick="manualEndCall()">✖</button>
+        <button class="end-btn" onclick="endCall()">✖</button>
     </div>
 </div>
 
-<audio id="successSound" src="https://assets.mixkit.co/active_storage/sfx/2013/2013-preview.mp3"></audio>
-<audio id="disconnectSound" src="https://assets.mixkit.co/active_storage/sfx/2357/2357-preview.mp3"></audio>
+<audio id="beep" src="https://assets.mixkit.co/active_storage/sfx/2357/2357-preview.mp3"></audio>
 
 <script>
-    let currentLang = 'mr';
+    let lang = 'mr';
     let step = -1;
-    let isCalling = false;
+    let isCallActive = false;
     let isReporting = false;
     let synth = window.speechSynthesis;
+    let rec;
 
-    const dataScript = {
-        mr: [
-            "तुमचे पूर्ण नाव काय आहे?",
-            "रुग्णाचे वय सांगा?",
-            "तुम्ही महिला आहात की पुरुष?",
-            "कोणत्या औषधामुळे तुम्हाला त्रास झाला?",
-            "नेमका काय त्रास झाला ते सांगा.",
-            "हा त्रास कधी सुरू झाला?",
-            "धन्यवाद! तुमचा रिपोर्ट सुरक्षितपणे नोंदवण्यात आला आहे. आम्ही लवकरच संपर्क करू. कॉल संपवत आहे."
-        ],
-        en: [
-            "What is your full name?",
-            "What is the age of the patient?",
-            "Are you male or female?",
-            "Which medicine caused the reaction?",
-            "Please describe the reaction.",
-            "When did this start?",
-            "Thank you! Your report has been recorded safely. We will contact you soon. Hanging up now."
-        ]
+    const scriptData = {
+        mr: ["तुमचे पूर्ण नाव सांगा.","तुमचे वय किती आहे?","तुम्ही पुरुष आहात की महिला?","कोणत्या औषधामुळे त्रास झाला?","काय त्रास झाला?","हा त्रास कधी सुरू झाला?","धन्यवाद! रिपोर्ट नोंदवण्यात आला आहे. कॉल संपवत आहे."],
+        en: ["What is your full name?","What is your age?","Are you male or female?","Which medicine caused this?","What happened?","When did it start?","Thank you! Report recorded. Hanging up."]
     };
 
-    function setLang(l) {
-        currentLang = l;
+    function initChat(l) {
+        lang = l;
         document.getElementById('inputArea').style.display = 'flex';
-        addBubble(l === 'mr' ? "मराठी निवडली" : "English Selected", 'user');
-        nextStep();
+        addBubble(l==='mr'?'मराठी निवडली':'English Selected', 'user');
+        step = -1;
+        next();
     }
 
-    function addBubble(txt, sender) {
-        const chat = document.getElementById('chat');
+    function addBubble(text, side) {
+        const win = document.getElementById('chatWindow');
         const div = document.createElement('div');
-        div.className = `bubble ${sender}-msg`;
-        div.innerText = txt;
-        chat.appendChild(div);
-        chat.scrollTop = chat.scrollHeight;
+        div.className = `bubble ${side}-msg`;
+        div.innerText = text;
+        win.appendChild(div);
+        win.scrollTop = win.scrollHeight;
     }
 
-    function botSpeak(txt) {
+    function botSpeak(text) {
         synth.cancel();
-        const msg = new SpeechSynthesisUtterance(txt);
-        msg.lang = currentLang === 'mr' ? 'mr-IN' : 'en-US';
-        msg.onend = () => {
-            if (isCalling && isReporting) {
-                // If it's the last message, end call
-                if (step === dataScript[currentLang].length - 1) {
-                    setTimeout(manualEndCall, 1500);
-                } else {
-                    startVoice();
-                }
-            }
-        };
+        const msg = new SpeechSynthesisUtterance(text);
+        msg.lang = lang === 'mr' ? 'mr-IN' : 'en-US';
+        msg.onend = () => { if(isCallActive && isReporting) startRecognition(); };
         synth.speak(msg);
     }
 
-    function nextStep() {
+    function next() {
         step++;
-        if (step < dataScript[currentLang].length) {
-            const q = dataScript[currentLang][step];
+        if (step < scriptData[lang].length) {
+            const q = scriptData[lang][step];
             addBubble(q, 'bot');
-            if (isCalling) {
+            if (isCallActive) {
                 botSpeak(q);
-                document.getElementById('genderBtns').style.display = (step === 2) ? 'flex' : 'none';
+                document.getElementById('callChips').style.display = (step === 2) ? 'flex' : 'none';
             }
-            if (step === dataScript[currentLang].length - 1) {
-                document.getElementById('successSound').play();
-            }
+        } else {
+            if(isCallActive) setTimeout(endCall, 2000);
         }
     }
 
-    function handleSend() {
-        const input = document.getElementById('userInput');
-        if (!input.value.trim()) return;
-        addBubble(input.value, 'user');
-        input.value = "";
-        setTimeout(nextStep, 700);
+    function handleInput() {
+        const inp = document.getElementById('userInput');
+        if (!inp.value.trim()) return;
+        addBubble(inp.value, 'user');
+        inp.value = "";
+        setTimeout(next, 600);
     }
 
-    function startVoice() {
+    function startRecognition() {
         const Speech = window.webkitSpeechRecognition || window.SpeechRecognition;
         if (!Speech) return;
-        const rec = new Speech();
-        rec.lang = currentLang === 'mr' ? 'mr-IN' : 'en-US';
+        rec = new Speech();
+        rec.lang = lang === 'mr' ? 'mr-IN' : 'en-US';
         
         rec.onstart = () => {
-            if(isCalling) {
-                document.getElementById('callAvatar').classList.add('listening-glow');
+            if(isCallActive) {
+                document.getElementById('callAv').classList.add('pulse-ring');
                 document.getElementById('callStatus').innerText = "मी ऐकत आहे...";
             }
         };
-
         rec.onresult = (e) => {
-            const res = e.results[0][0].transcript;
-            addBubble(res, 'user');
-            nextStep();
+            addBubble(e.results[0][0].transcript, 'user');
+            next();
         };
-
-        rec.onerror = () => {
-            if(isCalling && isReporting) botSpeak("कृपया पुन्हा एकदा सांगा.");
-        };
-
         rec.onend = () => {
-            document.getElementById('callAvatar').classList.remove('listening-glow');
+            document.getElementById('callAv').classList.remove('pulse-ring');
+            // Infinite listen loop until answer or end
+            if(isCallActive && isReporting && !synth.speaking) {
+                setTimeout(() => { if(isCallActive && isReporting) rec.start(); }, 1500);
+            }
         };
-
+        rec.onerror = () => { if(isCallActive) botSpeak("कृपया पुन्हा सांगा."); };
         rec.start();
     }
 
-    function voiceOverride(v) {
-        addBubble(v, 'user');
-        nextStep();
+    function toggleVoice() {
+        if(isCallActive) return;
+        startRecognition();
+    }
+
+    function inputOverride(val) {
+        if(rec) rec.abort();
+        addBubble(val, 'user');
+        next();
     }
 
     function startCall() {
-        isCalling = true;
-        document.getElementById('callOverlay').style.display = 'flex';
-        botSpeak("नमस्कार, रिपोर्ट नोंदवण्यासाठी १ दाबा, माहितीसाठी २ दाबा.");
+        isCallActive = true;
+        document.getElementById('callUi').style.display = 'flex';
+        document.getElementById('callTitle').innerText = "Suraksha Vigil Helpline";
+        botSpeak("नमस्कार, ADR रिपोर्टिंगसाठी १ दाबा.");
     }
 
     function pressKey(k) {
         if (k === 1) {
             isReporting = true;
-            document.getElementById('dialPad').style.display = 'none';
+            document.getElementById('dialer').style.display = 'none';
             step = -1;
-            nextStep();
+            next();
         }
     }
 
-    function manualEndCall() {
-        document.getElementById('disconnectSound').play();
-        isCalling = false;
-        isReporting = false;
-        document.getElementById('callOverlay').style.display = 'none';
-        document.getElementById('dialPad').style.display = 'grid';
+    function endCall() {
+        document.getElementById('beep').play();
+        isCallActive = false; isReporting = false;
+        document.getElementById('callUi').style.display = 'none';
+        document.getElementById('dialer').style.display = 'grid';
         synth.cancel();
+        if(rec) rec.abort();
     }
-</script>
 
+    // Fix for Keyboard Pushing Input
+    window.addEventListener('resize', () => {
+        document.getElementById('chatWindow').scrollTop = document.getElementById('chatWindow').scrollHeight;
+    });
+</script>
 </body>
 </html>
