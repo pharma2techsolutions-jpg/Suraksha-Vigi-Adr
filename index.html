@@ -2,8 +2,8 @@
 <html lang="mr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Suraksha Vigil AI</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Suraksha Vigil AI | ADR Reporting</title>
     <style>
         :root {
             --whatsapp-teal: #075e54;
@@ -15,37 +15,36 @@
         
         body, html { 
             margin: 0; padding: 0; height: 100%; width: 100%; 
-            font-family: 'Roboto', sans-serif; background: #000;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #ece5dd;
             display: flex; justify-content: center;
         }
 
-        /* Container - Mobile First */
         .app-container {
             width: 100%;
-            max-width: 450px;
-            height: 100vh;
+            max-width: 500px;
+            height: 100dvh; /* Dynamic viewport height for mobile browsers */
             background: var(--bg-color);
             display: flex;
             flex-direction: column;
             position: relative;
-            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            box-shadow: 0 0 20px rgba(0,0,0,0.2);
         }
 
         /* Header */
         .header {
             background: var(--whatsapp-teal);
             color: white;
-            padding: 12px 16px;
+            padding: 10px 15px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            height: 65px;
+            min-height: 60px;
+            z-index: 10;
         }
 
-        .bot-profile { display: flex; align-items: center; gap: 10px; }
-        .avatar { width: 40px; height: 40px; background: #fff; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 20px; }
-        
-        .header-actions { display: flex; gap: 20px; font-size: 20px; cursor: pointer; }
+        .bot-profile { display: flex; align-items: center; gap: 12px; }
+        .avatar { width: 40px; height: 40px; background: #fff; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 22px; }
+        .header-actions { display: flex; gap: 18px; font-size: 22px; cursor: pointer; }
 
         /* Chat Area */
         .chat-window {
@@ -58,33 +57,32 @@
         }
 
         .bubble {
-            max-width: 80%;
-            padding: 10px 15px;
-            margin-bottom: 10px;
-            border-radius: 15px;
+            max-width: 85%;
+            padding: 8px 12px;
+            margin-bottom: 8px;
+            border-radius: 10px;
             font-size: 15px;
-            line-height: 1.5;
-            position: relative;
-            word-wrap: break-word;
+            line-height: 1.4;
+            box-shadow: 0 1px 1px rgba(0,0,0,0.1);
         }
 
-        .bot-msg { background: white; align-self: flex-start; border-top-left-radius: 0; box-shadow: 0 1px 2px rgba(0,0,0,0.1); }
-        .user-msg { background: var(--whatsapp-light); align-self: flex-end; border-top-right-radius: 0; box-shadow: 0 1px 2px rgba(0,0,0,0.1); }
+        .bot-msg { background: white; align-self: flex-start; border-top-left-radius: 0; }
+        .user-msg { background: var(--whatsapp-light); align-self: flex-end; border-top-right-radius: 0; }
 
-        /* Input Bar */
+        /* Input Area */
         .input-bar {
-            padding: 10px;
+            padding: 8px;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 5px;
             background: #f0f0f0;
         }
 
         .text-input {
             flex: 1;
-            padding: 12px 18px;
+            padding: 10px 15px;
             border-radius: 25px;
-            border: none;
+            border: 1px solid #ddd;
             outline: none;
             font-size: 16px;
         }
@@ -100,10 +98,10 @@
             justify-content: center;
             align-items: center;
             cursor: pointer;
-            font-size: 18px;
+            font-size: 20px;
         }
 
-        /* Call UI Overlay */
+        /* Call Overlay */
         .call-overlay {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -113,18 +111,17 @@
             flex-direction: column;
             align-items: center;
             justify-content: space-around;
-            z-index: 1000;
-            padding: 40px 0;
+            z-index: 100;
+            padding: 50px 20px;
+            text-align: center;
         }
 
-        .call-info { text-align: center; }
-        .call-info h2 { margin: 10px 0; font-weight: normal; }
         .pulse-mic {
-            width: 100px; height: 100px;
+            width: 120px; height: 120px;
             background: rgba(255,255,255,0.1);
             border-radius: 50%;
             display: flex; justify-content: center; align-items: center;
-            font-size: 40px;
+            font-size: 50px;
             animation: pulse 1.5s infinite;
         }
 
@@ -134,7 +131,7 @@
             100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255,255,255,0); }
         }
 
-        .end-btn { width: 70px; height: 70px; background: #ff3b30; border-radius: 50%; display: flex; justify-content: center; align-items: center; border: none; color: white; font-size: 30px; }
+        .end-btn { width: 65px; height: 65px; background: #ff3b30; border-radius: 50%; display: flex; justify-content: center; align-items: center; border: none; color: white; font-size: 30px; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -144,13 +141,13 @@
         <div class="bot-profile">
             <div class="avatar">🛡️</div>
             <div>
-                <b id="bot-name">Suraksha Vigil</b><br>
-                <small id="status">Online</small>
+                <b>Suraksha Vigil Bot</b><br>
+                <small>Online</small>
             </div>
         </div>
         <div class="header-actions">
             <span onclick="startCall()">📞</span>
-            <span onclick="toggleLang()">🌐</span>
+            <span onclick="toggleLang()" title="Switch Language">🌐</span>
         </div>
     </div>
 
@@ -163,13 +160,13 @@
     </div>
 
     <div class="call-overlay" id="callOverlay">
-        <div class="call-info">
-            <div class="avatar" style="width:80px; height:80px; margin:0 auto; font-size:40px;">🛡️</div>
+        <div>
+            <div class="avatar" style="width:100px; height:100px; margin:0 auto 20px; font-size:50px;">🛡️</div>
             <h2>Suraksha Vigil</h2>
-            <p id="call-subtitle">बोलत राहा...</p>
+            <p id="call-subtitle">बॉट बोलत आहे...</p>
         </div>
-        <div class="pulse-mic">🎙️</div>
-        <button class="end-btn" onclick="endCall()">📞</button>
+        <div class="pulse-mic" id="mic-icon">🎙️</div>
+        <button class="end-btn" onclick="endCall()">✖</button>
     </div>
 </div>
 
@@ -185,22 +182,21 @@
             "सर्वात आधी तुमचे पूर्ण नाव सांगा.",
             "रुग्णाचे वय किती आहे?",
             "कोणत्या औषधामुळे त्रास झाला?",
-            "नेमका काय त्रास झाला ते थोडक्यात सांगा.",
-            "ठीक आहे, हा त्रास कधी सुरू झाला?",
-            "धन्यवाद! तुमचा रिपोर्ट सुरक्षितपणे नोंदवण्यात आला आहे."
+            "नेमका काय त्रास झाला ते सांगा.",
+            "हा त्रास कधी झाला? तारीख किंवा वेळ सांगा.",
+            "धन्यवाद! तुमचा रिपोर्ट नोंदवण्यात आला आहे. आम्ही लवकरच संपर्क करू."
         ],
         en: [
             "Hello, I am calling from Suraksha Vigil helpline. I want to do ADR reporting.",
             "First, please tell me your full name.",
             "What is the patient's age?",
             "Which medicine caused the reaction?",
-            "Describe the reaction in short.",
-            "When did this happen?",
-            "Thank you! Your report has been recorded safely."
+            "Please describe the reaction.",
+            "When did this happen? Tell me the date or time.",
+            "Thank you! Your report has been recorded. We will contact you soon."
         ]
     };
 
-    // UI: Add Message
     function addBubble(text, sender) {
         const chat = document.getElementById('chat');
         const div = document.createElement('div');
@@ -210,61 +206,53 @@
         chat.scrollTop = chat.scrollHeight;
     }
 
-    // Voice Synthesis (Bot speaks)
     function botSpeak(text) {
-        if (!('speechSynthesis' in window)) return;
-        speechSynthesis.cancel(); // Stop any current speech
+        window.speechSynthesis.cancel();
         const msg = new SpeechSynthesisUtterance(text);
         msg.lang = currentLang === 'mr' ? 'mr-IN' : 'en-US';
         msg.rate = 1.0;
         
+        msg.onstart = () => {
+            if(isCallMode) document.getElementById('call-subtitle').innerText = "बॉट बोलत आहे...";
+        };
+
         msg.onend = () => {
             if(isCallMode && step < script[currentLang].length - 1) {
-                setTimeout(startVoiceRecognition, 500);
+                setTimeout(startVoiceRecognition, 300);
             }
         };
         window.speechSynthesis.speak(msg);
     }
 
-    // Validation Logic
     function validateInput(input) {
-        if (step === 1) { // Name validation
-            if (input.trim().length < 3) {
-                const err = currentLang === 'mr' ? "माफ करा, तुमचे नाव पुन्हा नीट सांगा." : "Sorry, please say your name clearly.";
-                addBubble(err, 'bot');
-                botSpeak(err);
-                return false;
-            }
-        }
-        if (step === 2) { // Age validation
+        if (step === 1 && input.trim().split(" ").length < 1) return false;
+        if (step === 2) {
             const age = parseInt(input.replace(/\D/g,''));
-            if (isNaN(age) || age <= 0 || age > 120) {
-                const err = currentLang === 'mr' ? "माफ करा, तुमचे वय आकड्यामध्ये पुन्हा सांगा." : "Please mention your age in numbers.";
-                addBubble(err, 'bot');
-                botSpeak(err);
-                return false;
-            }
+            if (isNaN(age)) return false;
         }
         return true;
     }
 
-    // Logic: Process Input
     function processInput(input) {
-        if (!validateInput(input)) return;
+        if (!validateInput(input)) {
+            let errorMsg = currentLang === 'mr' ? "माफ करा, तुमचे उत्तर पुन्हा स्पष्ट सांगा." : "Sorry, please say it again clearly.";
+            addBubble(errorMsg, 'bot');
+            if(isCallMode) botSpeak(errorMsg);
+            return;
+        }
 
         capturedData[`step_${step}`] = input;
         step++;
 
         if (step < script[currentLang].length) {
-            const nextQ = script[currentLang][step];
             setTimeout(() => {
+                const nextQ = script[currentLang][step];
                 addBubble(nextQ, 'bot');
                 if (isCallMode) botSpeak(nextQ);
-            }, 800);
+            }, 600);
         }
     }
 
-    // Input Handlers
     function handleSend() {
         const input = document.getElementById('userInput');
         if (!input.value.trim()) return;
@@ -273,28 +261,36 @@
         input.value = "";
     }
 
+    // High Performance Voice Capture
     function startVoiceRecognition() {
         const Recognition = window.webkitSpeechRecognition || window.SpeechRecognition;
-        if (!Recognition) return alert("Browser does not support voice.");
+        if (!Recognition) return;
 
         const rec = new Recognition();
         rec.lang = currentLang === 'mr' ? 'mr-IN' : 'en-US';
-        
-        if(isCallMode) document.getElementById('call-subtitle').innerText = "मी ऐकत आहे...";
-        
-        rec.start();
+        rec.interimResults = false;
+        rec.maxAlternatives = 1;
+
+        rec.onstart = () => {
+            if(isCallMode) document.getElementById('call-subtitle').innerText = "मी ऐकत आहे, बोला...";
+            document.getElementById('mic-icon').style.opacity = "1";
+        };
+
         rec.onresult = (e) => {
             const result = e.results[0][0].transcript;
             addBubble(result, 'user');
             processInput(result);
         };
-        
+
         rec.onerror = () => {
-            if(isCallMode) setTimeout(startVoiceRecognition, 1000);
+            if(isCallMode && step < script[currentLang].length - 1) {
+                setTimeout(startVoiceRecognition, 500);
+            }
         };
+
+        rec.start();
     }
 
-    // Mode Toggles
     function startCall() {
         isCallMode = true;
         step = 0;
@@ -306,15 +302,15 @@
     function endCall() {
         isCallMode = false;
         document.getElementById('callOverlay').style.display = "none";
-        speechSynthesis.cancel();
+        window.speechSynthesis.cancel();
     }
 
     function toggleLang() {
         currentLang = currentLang === 'mr' ? 'en' : 'mr';
-        alert("Language: " + (currentLang === 'mr' ? "मराठी" : "English"));
+        document.getElementById('userInput').placeholder = currentLang === 'mr' ? "येथे टाइप करा..." : "Type here...";
+        alert(currentLang === 'mr' ? "भाषा बदलली: मराठी" : "Language Switched: English");
     }
 
-    // Init
     window.onload = () => {
         addBubble(script[currentLang][0], 'bot');
     };
