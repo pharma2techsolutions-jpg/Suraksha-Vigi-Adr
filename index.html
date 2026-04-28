@@ -22,7 +22,7 @@
         .app-container {
             width: 100%;
             max-width: 500px;
-            height: 100dvh; /* Dynamic viewport height for mobile browsers */
+            height: 100dvh;
             background: var(--bg-color);
             display: flex;
             flex-direction: column;
@@ -142,12 +142,12 @@
             <div class="avatar">🛡️</div>
             <div>
                 <b>Suraksha Vigil Bot</b><br>
-                <small>Online</small>
+                <small id="status-text">Online</small>
             </div>
         </div>
         <div class="header-actions">
             <span onclick="startCall()">📞</span>
-            <span onclick="toggleLang()" title="Switch Language">🌐</span>
+            <span onclick="toggleLang()">🌐</span>
         </div>
     </div>
 
@@ -170,10 +170,13 @@
     </div>
 </div>
 
+<audio id="successSound" src="https://assets.mixkit.co/active_storage/sfx/2013/2013-preview.mp3"></audio>
+
 <script>
     let currentLang = 'mr';
     let step = 0;
     let isCallMode = false;
+    let isFinished = false;
     let capturedData = {};
 
     const script = {
@@ -212,32 +215,26 @@
         msg.lang = currentLang === 'mr' ? 'mr-IN' : 'en-US';
         msg.rate = 1.0;
         
-        msg.onstart = () => {
-            if(isCallMode) document.getElementById('call-subtitle').innerText = "बॉट बोलत आहे...";
-        };
-
         msg.onend = () => {
-            if(isCallMode && step < script[currentLang].length - 1) {
+            // Only continue loop if reporting is NOT finished
+            if(isCallMode && !isFinished) {
                 setTimeout(startVoiceRecognition, 300);
             }
         };
         window.speechSynthesis.speak(msg);
     }
 
-    function validateInput(input) {
-        if (step === 1 && input.trim().split(" ").length < 1) return false;
-        if (step === 2) {
-            const age = parseInt(input.replace(/\D/g,''));
-            if (isNaN(age)) return false;
-        }
-        return true;
+    function playSuccess() {
+        const sound = document.getElementById('successSound');
+        sound.play();
     }
 
     function processInput(input) {
-        if (!validateInput(input)) {
-            let errorMsg = currentLang === 'mr' ? "माफ करा, तुमचे उत्तर पुन्हा स्पष्ट सांगा." : "Sorry, please say it again clearly.";
-            addBubble(errorMsg, 'bot');
-            if(isCallMode) botSpeak(errorMsg);
+        // If reporting is already done
+        if (isFinished) {
+            let stayMsg = currentLang === 'mr' ? "तुमचा रिपोर्ट आधीच सबमिट झाला आहे. धन्यवाद!" : "Your report is already submitted. Thank you!";
+            addBubble(stayMsg, 'bot');
+            if(isCallMode) botSpeak(stayMsg);
             return;
         }
 
@@ -249,6 +246,12 @@
                 const nextQ = script[currentLang][step];
                 addBubble(nextQ, 'bot');
                 if (isCallMode) botSpeak(nextQ);
+                
+                // If this was the last message
+                if (step === script[currentLang].length - 1) {
+                    isFinished = true;
+                    playSuccess();
+                }
             }, 600);
         }
     }
@@ -261,7 +264,6 @@
         input.value = "";
     }
 
-    // High Performance Voice Capture
     function startVoiceRecognition() {
         const Recognition = window.webkitSpeechRecognition || window.SpeechRecognition;
         if (!Recognition) return;
@@ -269,11 +271,9 @@
         const rec = new Recognition();
         rec.lang = currentLang === 'mr' ? 'mr-IN' : 'en-US';
         rec.interimResults = false;
-        rec.maxAlternatives = 1;
 
         rec.onstart = () => {
-            if(isCallMode) document.getElementById('call-subtitle').innerText = "मी ऐकत आहे, बोला...";
-            document.getElementById('mic-icon').style.opacity = "1";
+            if(isCallMode) document.getElementById('call-subtitle').innerText = "मी ऐकत आहे...";
         };
 
         rec.onresult = (e) => {
@@ -282,21 +282,20 @@
             processInput(result);
         };
 
-        rec.onerror = () => {
-            if(isCallMode && step < script[currentLang].length - 1) {
-                setTimeout(startVoiceRecognition, 500);
-            }
-        };
-
         rec.start();
     }
 
     function startCall() {
         isCallMode = true;
-        step = 0;
+        if (!isFinished) {
+            step = 0;
+            addBubble(script[currentLang][0], 'bot');
+            botSpeak(script[currentLang][0]);
+        } else {
+            let finalMsg = currentLang === 'mr' ? "तुमचा रिपोर्ट पूर्ण झाला आहे." : "Your report is completed.";
+            botSpeak(finalMsg);
+        }
         document.getElementById('callOverlay').style.display = "flex";
-        addBubble(script[currentLang][0], 'bot');
-        botSpeak(script[currentLang][0]);
     }
 
     function endCall() {
@@ -307,14 +306,12 @@
 
     function toggleLang() {
         currentLang = currentLang === 'mr' ? 'en' : 'mr';
-        document.getElementById('userInput').placeholder = currentLang === 'mr' ? "येथे टाइप करा..." : "Type here...";
-        alert(currentLang === 'mr' ? "भाषा बदलली: मराठी" : "Language Switched: English");
+        alert(currentLang === 'mr' ? "मराठी" : "English");
     }
 
     window.onload = () => {
         addBubble(script[currentLang][0], 'bot');
     };
 </script>
-
 </body>
 </html>
