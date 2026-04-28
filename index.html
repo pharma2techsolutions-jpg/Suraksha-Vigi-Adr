@@ -3,134 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Suraksha Vigil AI | ADR Reporting</title>
+    <title>Suraksha Vigil AI</title>
     <style>
-        :root {
-            --whatsapp-teal: #075e54;
-            --whatsapp-light: #dcf8c6;
-            --bg-color: #efeae2;
-        }
-
+        :root { --whatsapp-teal: #075e54; --whatsapp-light: #dcf8c6; --bg-color: #efeae2; }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body, html { margin: 0; padding: 0; height: 100%; width: 100%; font-family: 'Segoe UI', sans-serif; background: #ece5dd; display: flex; justify-content: center; }
         
-        body, html { 
-            margin: 0; padding: 0; height: 100%; width: 100%; 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #ece5dd;
-            display: flex; justify-content: center;
-        }
-
-        .app-container {
-            width: 100%;
-            max-width: 500px;
-            height: 100dvh;
-            background: var(--bg-color);
-            display: flex;
-            flex-direction: column;
-            position: relative;
-            box-shadow: 0 0 20px rgba(0,0,0,0.2);
-        }
-
-        /* Header */
-        .header {
-            background: var(--whatsapp-teal);
-            color: white;
-            padding: 10px 15px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            min-height: 60px;
-            z-index: 10;
-        }
-
+        .app-container { width: 100%; max-width: 500px; height: 100dvh; background: var(--bg-color); display: flex; flex-direction: column; position: relative; box-shadow: 0 0 20px rgba(0,0,0,0.2); }
+        .header { background: var(--whatsapp-teal); color: white; padding: 10px 15px; display: flex; align-items: center; justify-content: space-between; min-height: 65px; z-index: 10; }
         .bot-profile { display: flex; align-items: center; gap: 12px; }
         .avatar { width: 40px; height: 40px; background: #fff; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 22px; }
-        .header-actions { display: flex; gap: 18px; font-size: 22px; cursor: pointer; }
-
-        /* Chat Area */
-        .chat-window {
-            flex: 1;
-            padding: 15px;
-            overflow-y: auto;
-            background-image: url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png');
-            display: flex;
-            flex-direction: column;
-        }
-
-        .bubble {
-            max-width: 85%;
-            padding: 8px 12px;
-            margin-bottom: 8px;
-            border-radius: 10px;
-            font-size: 15px;
-            line-height: 1.4;
-            box-shadow: 0 1px 1px rgba(0,0,0,0.1);
-        }
-
+        .chat-window { flex: 1; padding: 15px; overflow-y: auto; background-image: url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png'); display: flex; flex-direction: column; }
+        .bubble { max-width: 85%; padding: 10px 14px; margin-bottom: 8px; border-radius: 12px; font-size: 15px; line-height: 1.4; box-shadow: 0 1px 1px rgba(0,0,0,0.1); }
         .bot-msg { background: white; align-self: flex-start; border-top-left-radius: 0; }
         .user-msg { background: var(--whatsapp-light); align-self: flex-end; border-top-right-radius: 0; }
-
-        /* Input Area */
-        .input-bar {
-            padding: 8px;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            background: #f0f0f0;
-        }
-
-        .text-input {
-            flex: 1;
-            padding: 10px 15px;
-            border-radius: 25px;
-            border: 1px solid #ddd;
-            outline: none;
-            font-size: 16px;
-        }
-
-        .btn-round {
-            width: 45px;
-            height: 45px;
-            background: var(--whatsapp-teal);
-            color: white;
-            border: none;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            font-size: 20px;
-        }
-
-        /* Call Overlay */
-        .call-overlay {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: #054d44;
-            color: white;
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            justify-content: space-around;
-            z-index: 100;
-            padding: 50px 20px;
-            text-align: center;
-        }
-
-        .pulse-mic {
-            width: 120px; height: 120px;
-            background: rgba(255,255,255,0.1);
-            border-radius: 50%;
-            display: flex; justify-content: center; align-items: center;
-            font-size: 50px;
-            animation: pulse 1.5s infinite;
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255,255,255,0.4); }
-            70% { transform: scale(1.1); box-shadow: 0 0 0 20px rgba(255,255,255,0); }
-            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255,255,255,0); }
-        }
-
+        .input-bar { padding: 10px; display: flex; align-items: center; gap: 8px; background: #f0f0f0; }
+        .text-input { flex: 1; padding: 12px 18px; border-radius: 25px; border: none; outline: none; font-size: 16px; }
+        .btn-round { width: 45px; height: 45px; background: var(--whatsapp-teal); color: white; border: none; border-radius: 50%; display: flex; justify-content: center; align-items: center; cursor: pointer; font-size: 20px; }
+        
+        .call-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #054d44; color: white; display: none; flex-direction: column; align-items: center; justify-content: space-around; z-index: 100; padding: 50px 20px; text-align: center; }
+        .pulse-mic { width: 110px; height: 110px; background: rgba(255,255,255,0.1); border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 50px; }
+        .active-mic { animation: pulse 1.2s infinite; background: rgba(255,255,255,0.2); }
+        @keyframes pulse { 0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255,255,255,0.4); } 70% { transform: scale(1.1); box-shadow: 0 0 0 20px rgba(255,255,255,0); } 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255,255,255,0); } }
         .end-btn { width: 65px; height: 65px; background: #ff3b30; border-radius: 50%; display: flex; justify-content: center; align-items: center; border: none; color: white; font-size: 30px; cursor: pointer; }
     </style>
 </head>
@@ -140,32 +34,29 @@
     <div class="header">
         <div class="bot-profile">
             <div class="avatar">🛡️</div>
-            <div>
-                <b>Suraksha Vigil Bot</b><br>
-                <small id="status-text">Online</small>
-            </div>
+            <div><b>Suraksha Vigil</b><br><small id="status">Online</small></div>
         </div>
-        <div class="header-actions">
-            <span onclick="startCall()">📞</span>
-            <span onclick="toggleLang()">🌐</span>
+        <div style="display:flex; gap:15px; font-size: 22px;">
+            <span onclick="startCall()" style="cursor:pointer">📞</span>
+            <span onclick="toggleLang()" style="cursor:pointer">🌐</span>
         </div>
     </div>
 
     <div class="chat-window" id="chat"></div>
 
     <div class="input-bar">
-        <input type="text" id="userInput" class="text-input" placeholder="येथे टाइप करा...">
+        <input type="text" id="userInput" class="text-input" placeholder="टाइप करा...">
         <button class="btn-round" onclick="handleSend()">➤</button>
         <button class="btn-round" onclick="startVoiceRecognition()">🎤</button>
     </div>
 
     <div class="call-overlay" id="callOverlay">
         <div>
-            <div class="avatar" style="width:100px; height:100px; margin:0 auto 20px; font-size:50px;">🛡️</div>
+            <div class="avatar" style="width:90px; height:90px; margin:0 auto 15px; font-size:45px;">🛡️</div>
             <h2>Suraksha Vigil</h2>
             <p id="call-subtitle">बॉट बोलत आहे...</p>
         </div>
-        <div class="pulse-mic" id="mic-icon">🎙️</div>
+        <div class="pulse-mic" id="mic-ui">🎙️</div>
         <button class="end-btn" onclick="endCall()">✖</button>
     </div>
 </div>
@@ -177,25 +68,25 @@
     let step = 0;
     let isCallMode = false;
     let isFinished = false;
-    let capturedData = {};
+    let recognition;
 
     const script = {
         mr: [
             "नमस्कार, मी सुरक्षा विजील हेल्पलाईनमधून बोलत आहे. मला ADR रिपोर्टिंग करायची आहे.",
-            "सर्वात आधी तुमचे पूर्ण नाव सांगा.",
-            "रुग्णाचे वय किती आहे?",
+            "तुमचे पूर्ण नाव सांगा.",
+            "रुग्णाचे वय किती सांगा?",
             "कोणत्या औषधामुळे त्रास झाला?",
-            "नेमका काय त्रास झाला ते सांगा.",
-            "हा त्रास कधी झाला? तारीख किंवा वेळ सांगा.",
+            "नेमका काय त्रास झाला?",
+            "हा त्रास कधी झाला?",
             "धन्यवाद! तुमचा रिपोर्ट नोंदवण्यात आला आहे. आम्ही लवकरच संपर्क करू."
         ],
         en: [
-            "Hello, I am calling from Suraksha Vigil helpline. I want to do ADR reporting.",
-            "First, please tell me your full name.",
+            "Hello, this is Suraksha Vigil helpline. I want to do ADR reporting.",
+            "Please tell me your full name.",
             "What is the patient's age?",
             "Which medicine caused the reaction?",
-            "Please describe the reaction.",
-            "When did this happen? Tell me the date or time.",
+            "What was the reaction?",
+            "When did this happen?",
             "Thank you! Your report has been recorded. We will contact you soon."
         ]
     };
@@ -213,46 +104,38 @@
         window.speechSynthesis.cancel();
         const msg = new SpeechSynthesisUtterance(text);
         msg.lang = currentLang === 'mr' ? 'mr-IN' : 'en-US';
-        msg.rate = 1.0;
         
+        msg.onstart = () => {
+            if(isCallMode) document.getElementById('call-subtitle').innerText = "बॉट बोलत आहे...";
+        };
+
         msg.onend = () => {
-            // Only continue loop if reporting is NOT finished
             if(isCallMode && !isFinished) {
-                setTimeout(startVoiceRecognition, 300);
+                setTimeout(startVoiceRecognition, 400);
             }
         };
         window.speechSynthesis.speak(msg);
     }
 
-    function playSuccess() {
-        const sound = document.getElementById('successSound');
-        sound.play();
-    }
-
     function processInput(input) {
-        // If reporting is already done
         if (isFinished) {
-            let stayMsg = currentLang === 'mr' ? "तुमचा रिपोर्ट आधीच सबमिट झाला आहे. धन्यवाद!" : "Your report is already submitted. Thank you!";
-            addBubble(stayMsg, 'bot');
-            if(isCallMode) botSpeak(stayMsg);
+            let msg = currentLang === 'mr' ? "रिपोर्ट आधीच जमा झाला आहे." : "Report already submitted.";
+            addBubble(msg, 'bot');
+            if(isCallMode) botSpeak(msg);
             return;
         }
 
-        capturedData[`step_${step}`] = input;
         step++;
-
         if (step < script[currentLang].length) {
             setTimeout(() => {
                 const nextQ = script[currentLang][step];
                 addBubble(nextQ, 'bot');
                 if (isCallMode) botSpeak(nextQ);
-                
-                // If this was the last message
                 if (step === script[currentLang].length - 1) {
                     isFinished = true;
-                    playSuccess();
+                    document.getElementById('successSound').play();
                 }
-            }, 600);
+            }, 700);
         }
     }
 
@@ -265,53 +148,60 @@
     }
 
     function startVoiceRecognition() {
-        const Recognition = window.webkitSpeechRecognition || window.SpeechRecognition;
-        if (!Recognition) return;
+        const Speech = window.webkitSpeechRecognition || window.SpeechRecognition;
+        if (!Speech) return;
 
-        const rec = new Recognition();
-        rec.lang = currentLang === 'mr' ? 'mr-IN' : 'en-US';
-        rec.interimResults = false;
+        recognition = new Speech();
+        recognition.lang = currentLang === 'mr' ? 'mr-IN' : 'en-US';
+        recognition.interimResults = false;
+        recognition.continuous = false; // अचूकतेसाठी false ठेवणे चांगले
 
-        rec.onstart = () => {
-            if(isCallMode) document.getElementById('call-subtitle').innerText = "मी ऐकत आहे...";
+        recognition.onstart = () => {
+            document.getElementById('mic-ui').classList.add('active-mic');
+            if(isCallMode) document.getElementById('call-subtitle').innerText = "मी ऐकत आहे, बोला...";
         };
 
-        rec.onresult = (e) => {
+        recognition.onresult = (e) => {
             const result = e.results[0][0].transcript;
-            addBubble(result, 'user');
-            processInput(result);
+            if(result.trim().length > 0) {
+                addBubble(result, 'user');
+                processInput(result);
+            }
         };
 
-        rec.start();
+        recognition.onend = () => {
+            document.getElementById('mic-ui').classList.remove('active-mic');
+            // जर बोलणे पूर्ण झाले नसेल आणि कॉल मोड चालू असेल तर पुन्हा सुरू करा
+            if(isCallMode && !isFinished) {
+                // recognition.start(); // Auto-restart can be tricky, handled by botSpeak.onend
+            }
+        };
+
+        recognition.start();
     }
 
     function startCall() {
         isCallMode = true;
-        if (!isFinished) {
-            step = 0;
+        document.getElementById('callOverlay').style.display = "flex";
+        if (step === 0) {
             addBubble(script[currentLang][0], 'bot');
             botSpeak(script[currentLang][0]);
-        } else {
-            let finalMsg = currentLang === 'mr' ? "तुमचा रिपोर्ट पूर्ण झाला आहे." : "Your report is completed.";
-            botSpeak(finalMsg);
         }
-        document.getElementById('callOverlay').style.display = "flex";
     }
 
     function endCall() {
         isCallMode = false;
         document.getElementById('callOverlay').style.display = "none";
         window.speechSynthesis.cancel();
+        if(recognition) recognition.stop();
     }
 
     function toggleLang() {
-        currentLang = currentLang === 'mr' ? 'en' : 'mr';
-        alert(currentLang === 'mr' ? "मराठी" : "English");
+        currentLang = (currentLang === 'mr') ? 'en' : 'mr';
+        alert("Language: " + currentLang.toUpperCase());
     }
 
-    window.onload = () => {
-        addBubble(script[currentLang][0], 'bot');
-    };
+    window.onload = () => { addBubble(script[currentLang][0], 'bot'); };
 </script>
 </body>
 </html>
