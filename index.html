@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 
 <title>Suraksha Vigil Bot</title>
 
@@ -12,30 +12,52 @@
 margin:0;
 padding:0;
 box-sizing:border-box;
+-webkit-tap-highlight-color:transparent;
 }
 
-body{
+html,body{
+width:100%;
+height:100%;
+overflow:hidden;
 font-family:Arial,sans-serif;
 background:#0b141a;
+}
+
+/* MOBILE FRIENDLY BODY */
+
+body{
 display:flex;
 justify-content:center;
 align-items:center;
-height:100vh;
-overflow:hidden;
 }
 
 /* APP */
 
 .app{
-width:430px;
-height:95vh;
+width:100%;
+max-width:430px;
+height:100dvh;
 background:#efeae2;
 display:flex;
 flex-direction:column;
 overflow:hidden;
-border-radius:18px;
-box-shadow:0 0 30px rgba(0,0,0,.5);
 position:relative;
+}
+
+/* DESKTOP LOOK */
+
+@media(min-width:700px){
+
+body{
+padding:20px;
+}
+
+.app{
+height:95vh;
+border-radius:22px;
+box-shadow:0 0 35px rgba(0,0,0,.5);
+}
+
 }
 
 /* HEADER */
@@ -43,20 +65,26 @@ position:relative;
 .header{
 background:#075e54;
 color:white;
-padding:10px 14px;
+padding:
+max(12px,env(safe-area-inset-top))
+14px
+12px
+14px;
 display:flex;
 justify-content:space-between;
 align-items:center;
+flex-shrink:0;
 }
 
 .left{
 display:flex;
 align-items:center;
+min-width:0;
 }
 
 .dp{
-width:42px;
-height:42px;
+width:44px;
+height:44px;
 border-radius:50%;
 background:white;
 display:flex;
@@ -64,10 +92,22 @@ justify-content:center;
 align-items:center;
 margin-right:10px;
 font-size:22px;
+flex-shrink:0;
+}
+
+.head-text{
+overflow:hidden;
+}
+
+.head-text b{
+font-size:15px;
+white-space:nowrap;
+overflow:hidden;
+text-overflow:ellipsis;
 }
 
 .head-text small{
-opacity:.8;
+opacity:.85;
 font-size:12px;
 }
 
@@ -76,10 +116,11 @@ display:flex;
 align-items:center;
 gap:6px;
 background:rgba(255,255,255,.15);
-padding:8px 14px;
+padding:9px 13px;
 border-radius:20px;
 cursor:pointer;
-font-size:14px;
+font-size:13px;
+white-space:nowrap;
 }
 
 /* CHAT */
@@ -87,45 +128,64 @@ font-size:14px;
 .chat{
 flex:1;
 overflow-y:auto;
+overflow-x:hidden;
 padding:12px;
 display:flex;
 flex-direction:column;
 background:#efeae2;
 scroll-behavior:smooth;
+-webkit-overflow-scrolling:touch;
 }
 
+.chat::-webkit-scrollbar{
+width:4px;
+}
+
+.chat::-webkit-scrollbar-thumb{
+background:#c7c7c7;
+border-radius:10px;
+}
+
+/* MESSAGE */
+
 .msg{
-max-width:78%;
-padding:10px 13px;
+max-width:85%;
+padding:11px 13px;
 margin:5px 0;
-border-radius:12px;
+border-radius:14px;
 font-size:14px;
 line-height:1.5;
 animation:fade .2s ease;
 word-wrap:break-word;
+overflow-wrap:break-word;
 }
 
 @keyframes fade{
+
 from{
 opacity:0;
-transform:translateY(5px);
+transform:translateY(6px);
 }
+
 to{
 opacity:1;
 transform:translateY(0);
 }
+
 }
 
 .bot{
 background:white;
 align-self:flex-start;
 border-top-left-radius:0;
+box-shadow:0 1px 2px rgba(0,0,0,.08);
 }
 
 .user{
 background:#d9fdd3;
 align-self:flex-end;
 border-top-right-radius:0;
+box-shadow:0 1px 2px rgba(0,0,0,.08);
 }
 
 .time{
@@ -135,36 +195,43 @@ margin-top:4px;
 text-align:right;
 }
 
-/* INPUT */
+/* INPUT AREA */
 
 .input-area{
 display:flex;
-padding:8px;
-background:#f0f2f5;
 align-items:center;
+gap:7px;
+padding:
+8px
+10px
+calc(8px + env(safe-area-inset-bottom))
+10px;
+background:#f0f2f5;
+flex-shrink:0;
 }
 
 input{
 flex:1;
-padding:12px;
+padding:13px 15px;
 border:none;
 border-radius:25px;
 outline:none;
-font-size:14px;
+font-size:15px;
 background:white;
+min-width:0;
 }
 
 .send,
 .mic{
-width:44px;
-height:44px;
+width:46px;
+height:46px;
 border:none;
 border-radius:50%;
 background:#075e54;
 color:white;
-margin-left:6px;
 font-size:18px;
 cursor:pointer;
+flex-shrink:0;
 }
 
 /* CHIPS */
@@ -187,8 +254,8 @@ cursor:pointer;
 transition:.2s;
 }
 
-.chip:hover{
-transform:scale(1.04);
+.chip:active{
+transform:scale(.96);
 }
 
 /* CALL SCREEN */
@@ -203,27 +270,43 @@ justify-content:center;
 align-items:center;
 color:white;
 text-align:center;
-padding:20px;
+padding:
+20px
+20px
+calc(20px + env(safe-area-inset-bottom))
+20px;
 z-index:9999;
+overflow-y:auto;
 }
 
 .call-avatar{
-width:120px;
-height:120px;
+width:110px;
+height:110px;
 border-radius:50%;
 background:white;
 display:flex;
 justify-content:center;
 align-items:center;
-font-size:55px;
+font-size:50px;
 margin-bottom:20px;
 animation:pulse 1.5s infinite;
+flex-shrink:0;
 }
 
 @keyframes pulse{
-0%{transform:scale(1);}
-50%{transform:scale(1.05);}
-100%{transform:scale(1);}
+
+0%{
+transform:scale(1);
+}
+
+50%{
+transform:scale(1.05);
+}
+
+100%{
+transform:scale(1);
+}
+
 }
 
 .call-title{
@@ -236,19 +319,22 @@ margin-bottom:10px;
 font-size:15px;
 line-height:1.7;
 max-width:320px;
-opacity:.95;
+opacity:.96;
 }
+
+/* DIAL PAD */
 
 .dialpad{
 display:grid;
-grid-template-columns:repeat(3,80px);
+grid-template-columns:repeat(3,75px);
 gap:15px;
 margin-top:35px;
+justify-content:center;
 }
 
 .dial-btn{
-width:80px;
-height:80px;
+width:75px;
+height:75px;
 border-radius:50%;
 border:none;
 background:white;
@@ -259,13 +345,13 @@ cursor:pointer;
 transition:.2s;
 }
 
-.dial-btn:hover{
-transform:scale(1.05);
+.dial-btn:active{
+transform:scale(.95);
 }
 
 .end{
-margin-top:40px;
-padding:12px 30px;
+margin-top:35px;
+padding:13px 30px;
 border:none;
 border-radius:25px;
 background:red;
@@ -274,14 +360,38 @@ font-size:16px;
 cursor:pointer;
 }
 
-/* MOBILE */
+/* SMALL MOBILE */
 
-@media(max-width:500px){
+@media(max-width:380px){
 
-.app{
-width:100%;
-height:100vh;
-border-radius:0;
+.msg{
+font-size:13px;
+max-width:90%;
+}
+
+.chip{
+font-size:12px;
+padding:9px 13px;
+}
+
+input{
+font-size:14px;
+}
+
+.helpline-btn{
+padding:8px 10px;
+font-size:12px;
+}
+
+.dialpad{
+grid-template-columns:repeat(3,68px);
+gap:12px;
+}
+
+.dial-btn{
+width:68px;
+height:68px;
+font-size:24px;
 }
 
 }
@@ -322,12 +432,12 @@ border-radius:0;
 
 <div class="input-area">
 
-<input 
-type="text" 
-id="input" 
+<input
+type="text"
+id="input"
 placeholder="Type message..."
 onkeypress="if(event.key==='Enter') send()"
->
+/>
 
 <button class="send" onclick="send()">➤</button>
 
@@ -440,11 +550,16 @@ div.className="msg "+type;
 
 div.innerHTML=
 msg+
-`<div class="time">${new Date().toLocaleTimeString()}</div>`;
+`<div class="time">${new Date().toLocaleTimeString([],{
+hour:'2-digit',
+minute:'2-digit'
+})}</div>`;
 
 chat.appendChild(div);
 
+setTimeout(()=>{
 chat.scrollTop=chat.scrollHeight;
+},100);
 
 }
 
@@ -574,9 +689,7 @@ I will help you with ADR Reporting.
 }
 
 setTimeout(()=>{
-
 askQuestion();
-
 },700);
 
 }
@@ -645,7 +758,9 @@ wrap.appendChild(b);
 
 chat.appendChild(wrap);
 
+setTimeout(()=>{
 chat.scrollTop=chat.scrollHeight;
+},100);
 
 }
 
@@ -754,8 +869,6 @@ speak(welcome);
 
 function dialOption(n){
 
-/* OPTION 1 */
-
 if(n==1){
 
 let msg=
@@ -783,14 +896,10 @@ document.getElementById("callInfo").innerHTML=
 speak(msg);
 
 setTimeout(()=>{
-
 endCall();
-
 },55000);
 
 }
-
-/* OPTION 2 */
 
 else if(n==2){
 
@@ -817,14 +926,10 @@ document.getElementById("callInfo").innerHTML=
 speak(msg);
 
 setTimeout(()=>{
-
 endCall();
-
 },50000);
 
 }
-
-/* OPTION 3 */
 
 else if(n==3){
 
@@ -851,9 +956,7 @@ document.getElementById("callInfo").innerHTML=
 speak(msg);
 
 setTimeout(()=>{
-
 endCall();
-
 },70000);
 
 }
@@ -887,15 +990,11 @@ body:JSON.stringify(data)
 })
 
 .then(()=>{
-
 console.log("Data Sent");
-
 })
 
 .catch(err=>{
-
 console.log(err);
-
 });
 
 }
