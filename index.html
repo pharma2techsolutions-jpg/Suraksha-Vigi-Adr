@@ -22,7 +22,7 @@
         .call-status { font-size: 18px; margin-top: 10px; color: #25d366; font-weight: bold; }
         .end-call-btn { width: 70px; height: 70px; background: #ff3b30; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; margin-bottom: 50px; border: none; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
 
-        /* Existing UI Styles */
+        /* UI Elements */
         .progress-container { width: 100%; height: 4px; background: #ccc; position: absolute; top: 60px; z-index: 101; }
         .progress-bar { height: 100%; width: 0%; background: var(--accent); transition: 0.3s; }
         .header { background: var(--wa-header); color: white; padding: 10px 16px; display: flex; align-items: center; justify-content: space-between; min-height: 60px; z-index: 100; flex-shrink: 0; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
@@ -44,13 +44,13 @@
 <body>
 
 <div class="app-container" id="mainContainer">
-    <!-- Voice Call Overlay UI -->
+    <!-- Call Overlay -->
     <div id="voiceOverlay">
         <div>
             <div class="caller-img pulse">🛡️</div>
             <h2>Suraksha Vigil AI</h2>
-            <div class="call-status" id="callDuration">Connected...</div>
-            <p id="voiceTranscript" style="padding: 20px; font-style: italic; opacity: 0.9; font-size: 18px;">"नमस्ते, मी रिपोर्टिंग एजंट बोलत आहे..."</p>
+            <div class="call-status">Connected...</div>
+            <p id="voiceTranscript" style="padding: 20px; font-style: italic; opacity: 0.9; font-size: 18px;">"नमस्ते..."</p>
         </div>
         <button class="end-call-btn" onclick="endCall()">
             <svg width="35" height="35" viewBox="0 0 24 24" fill="white"><path d="M12 9c-1.6 0-3.15.25-4.6.72v3.1c0 .39-.23.74-.56.9-.98.49-1.87 1.12-2.66 1.85-.18.18-.43.28-.7.28-.28 0-.53-.11-.71-.29L.29 13.08c-.18-.17-.29-.42-.29-.7 0-.28.11-.53.29-.71C3.34 8.78 7.46 7 12 7s8.66 1.78 11.71 4.67c.18.18.29.43.29.71 0 .28-.11.53-.29.71l-2.48 2.48c-.18.18-.43.29-.71.29-.27 0-.52-.11-.7-.28-.79-.74-1.69-1.36-2.67-1.85-.33-.16-.56-.5-.56-.9v-3.1C15.15 9.25 13.6 9 12 9z"/></svg>
@@ -90,7 +90,6 @@
 <script>
 let step = 0;
 let reportData = {};
-let lang = "mr";
 let finalSource = "Web Chat"; 
 const scriptURL = "https://script.google.com/macros/s/AKfycbwHdpYghnTnc0KDd8rGwldWbNvm--QZAJmhGeTFj1KyBQ0TnnXGJnnoEJFC7fYn1Z53xQ/exec";
 
@@ -117,17 +116,17 @@ const questions = {
 
 function speak(text) {
     if ('speechSynthesis' in window) {
-        window.speechSynthesis.cancel(); // Stop any current speech
+        window.speechSynthesis.cancel();
         let msg = new SpeechSynthesisUtterance(text);
-        msg.lang = 'mr-IN'; // Marathi Voice
-        msg.rate = 0.9; // Normal speed
+        msg.lang = 'mr-IN';
+        msg.rate = 0.95;
         window.speechSynthesis.speak(msg);
         document.getElementById("voiceTranscript").innerText = `"${text}"`;
     }
 }
 
 function startCall() {
-    let intro = "सुरक्षा विजिल हेल्पलाइनमध्ये तुमचे स्वागत आहे. कृपया पर्याय निवडा.";
+    let intro = "सुरक्षा विजिल हेल्पलाइनमध्ये तुमचे स्वागत आहे. कृपया खालील पर्याय निवडा.";
     botMsg("📞 " + intro + "\n\n1️⃣ ADR रिपोर्टिंग का गरजेचे आहे?\n2️⃣ रिपोर्टिंगचे फायदे.\n3️⃣ सुरक्षा विजिल प्रोजेक्टबद्दल.\n4️⃣ फोनद्वारे ADR रिपोर्ट करा.\n5️⃣ पुन्हा ऐकण्यासाठी.");
     speak(intro);
     showCallChips();
@@ -160,18 +159,18 @@ function handleCallInput(val) {
     } else if(val === "4") {
         finalSource = "IVR Call";
         document.getElementById("voiceOverlay").style.display = "flex";
-        let t = "नमस्ते, मी रिपोर्टिंग एजंट बोलत आहे. आपण कॉलद्वारे ए डी आर रिपोर्ट करत आहात. चला माहिती भरूया.";
+        let t = "नमस्ते, मी रिपोर्टिंग असिस्टंट. आपण व्हॉइस कॉलद्वारे माहिती भरत आहात. चला सुरुवात करूया.";
         speak(t);
         setTimeout(() => { 
             document.getElementById("voiceOverlay").style.display = "none";
             setLang('mr'); 
-        }, 4000);
+        }, 4500);
         return;
     } else if(val === "5") {
         startCall();
         return;
     }
-    setTimeout(showCallChips, 2000);
+    setTimeout(showCallChips, 2500);
 }
 
 function endCall() {
@@ -181,11 +180,9 @@ function endCall() {
 }
 
 function setLang(l) {
-    lang = l;
     document.getElementById('langChips').style.display = 'none';
     document.getElementById('inputBar').style.display = 'flex';
-    step = 0;
-    askQ();
+    step = 0; askQ();
 }
 
 function askQ() {
@@ -194,7 +191,7 @@ function askQ() {
     if (step < qList.length) {
         let cur = qList[step];
         botMsg(cur.q);
-        speak(cur.q); // AI speaks the question
+        speak(cur.q);
         if (cur.chips) {
             let grp = document.createElement("div");
             grp.className = "chip-group";
@@ -205,12 +202,10 @@ function askQ() {
                 grp.appendChild(c);
             });
             document.getElementById("chat").appendChild(grp);
-            scroll();
         }
     } else {
-        let t = "डेटा सेव्ह होत आहे. आपला रिपोर्ट यशस्वीपणे नोंदवला गेला आहे. धन्यवाद!";
-        botMsg("🔄 " + t);
-        speak(t);
+        let t = "माहिती यशस्वीपणे नोंदवली आहे. धन्यवाद!";
+        botMsg("✅ " + t); speak(t);
         sendToSheet(reportData);
     }
 }
@@ -232,15 +227,13 @@ function send() {
 
 function sendToSheet(finalData) {
     finalData["source"] = finalSource;
-    fetch(scriptURL, { method: "POST", mode: "no-cors", body: JSON.stringify(finalData) })
-    .then(() => {
+    fetch(scriptURL, { method: "POST", mode: "no-cors", body: JSON.stringify(finalData) }).then(() => {
         setTimeout(() => { location.reload(); }, 4000);
     });
 }
 
 function updateProgress() {
-    let percent = (step / questions.mr.length) * 100;
-    document.getElementById('pbar').style.width = percent + "%";
+    document.getElementById('pbar').style.width = (step / 11) * 100 + "%";
 }
 
 function botMsg(t) {
