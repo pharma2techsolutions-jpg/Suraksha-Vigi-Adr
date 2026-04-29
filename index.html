@@ -3,101 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Suraksha Vigil AI | Professional</title>
+    <title>Suraksha Vigil AI | Professional v3.0</title>
     <style>
-        :root { 
-            --wa-teal: #075e54; 
-            --wa-light: #dcf8c6; 
-            --wa-bg: #efeae2; 
-            --wa-header: #075e54;
-            --wa-bg-color: #d1d7db;
-        }
-
-        * { box-sizing: border-box; font-family: 'Segoe UI', Helvetica, Arial, sans-serif; -webkit-tap-highlight-color: transparent; }
-        
-        /* Fixed Body Height for Mobile Keyboard */
-        body, html { 
-            margin: 0; padding: 0; 
-            height: 100%; width: 100%;
-            background: var(--wa-bg-color);
-            display: flex; justify-content: center;
-            overflow: hidden; 
-        }
-
-        .app-container { 
-            width: 100%; max-width: 500px; 
-            height: 100dvh; /* Dynamic Viewport Height */
-            background: var(--wa-bg); 
-            display: flex; flex-direction: column; 
-            position: relative;
-        }
-
-        /* Header (WhatsApp Style) */
-        .header { 
-            background: var(--wa-header); color: white; padding: 10px 16px; 
-            display: flex; align-items: center; justify-content: space-between; 
-            min-height: 60px; z-index: 100; flex-shrink: 0;
-        }
+        :root { --wa-teal: #075e54; --wa-light: #dcf8c6; --wa-bg: #efeae2; --wa-header: #075e54; --accent: #25d366; }
+        * { box-sizing: border-box; font-family: 'Segoe UI', Helvetica, sans-serif; -webkit-tap-highlight-color: transparent; }
+        body, html { margin: 0; padding: 0; height: 100%; width: 100%; background: #d1d7db; display: flex; justify-content: center; overflow: hidden; }
+        .app-container { width: 100%; max-width: 500px; height: 100dvh; background: var(--wa-bg); display: flex; flex-direction: column; position: relative; }
+        .progress-container { width: 100%; height: 4px; background: #ccc; position: absolute; top: 60px; z-index: 101; }
+        .progress-bar { height: 100%; width: 0%; background: var(--accent); transition: 0.3s; }
+        .header { background: var(--wa-header); color: white; padding: 10px 16px; display: flex; align-items: center; justify-content: space-between; min-height: 60px; z-index: 100; flex-shrink: 0; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
         .bot-info { display: flex; align-items: center; gap: 12px; }
-        .avatar { 
-            width: 40px; height: 40px; border-radius: 50%; background: #fff; 
-            display: flex; align-items: center; justify-content: center; font-size: 22px; 
-        }
-
-        /* Chat Window - Fixes Keyboard Overlap */
-        .chat-window { 
-            flex: 1; overflow-y: auto; padding: 15px; 
-            display: flex; flex-direction: column;
-            background-image: url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png');
-            background-size: cover;
-            scroll-behavior: smooth;
-        }
-
-        .bubble { 
-            max-width: 85%; padding: 8px 12px; margin-bottom: 10px; 
-            border-radius: 10px; font-size: 15px; line-height: 1.4; 
-            box-shadow: 0 1px 1px rgba(0,0,0,0.1); position: relative;
-            white-space: pre-line;
-        }
+        .avatar { width: 40px; height: 40px; border-radius: 50%; background: #fff; display: flex; align-items: center; justify-content: center; font-size: 22px; }
+        .call-btn { background: #25d366; border: none; padding: 8px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; }
+        .chat-window { flex: 1; overflow-y: auto; padding: 15px; display: flex; flex-direction: column; background-image: url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png'); background-size: cover; scroll-behavior: smooth; padding-top: 15px; }
+        .bubble { max-width: 85%; padding: 12px 16px; margin-bottom: 12px; border-radius: 15px; font-size: 15px; line-height: 1.5; box-shadow: 0 1px 2px rgba(0,0,0,0.15); position: relative; }
         .bot { background: white; align-self: flex-start; border-top-left-radius: 0; }
-        .user { background: var(--wa-light); align-self: flex-end; border-top-right-radius: 0; }
-
-        .chip-group { display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
-        .chip { 
-            background: #fff; border: 1px solid var(--wa-teal); color: var(--wa-teal); 
-            padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: bold; cursor: pointer;
-        }
-
-        /* Input Area - Cleaner Icon */
-        .input-bar { 
-            padding: 8px 12px; background: #f0f0f0; display: flex; 
-            align-items: center; gap: 8px; min-height: 60px; flex-shrink: 0;
-        }
-        .text-input { 
-            flex: 1; padding: 12px 18px; border-radius: 25px; 
-            border: none; outline: none; font-size: 16px; background: #fff;
-        }
-        .icon-btn { 
-            width: 48px; height: 48px; background: var(--wa-teal); 
-            color: white; border: none; border-radius: 50%; 
-            display: flex; align-items: center; justify-content: center; cursor: pointer;
-            transition: 0.2s;
-        }
-        .icon-btn svg { width: 22px; height: 22px; fill: white; margin-left: 3px; }
-
-        /* Call Screen */
-        .call-ui { 
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
-            background: #054d44; color: white; display: none; 
-            flex-direction: column; align-items: center; z-index: 200; padding-top: 60px;
-        }
-        .call-profile { width: 110px; height: 110px; border-radius: 50%; background: rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; font-size: 50px; margin-bottom: 20px; border: 2px solid rgba(255,255,255,0.2); }
-        .pulse { animation: pulse-anim 1.5s infinite; }
-        @keyframes pulse-anim { 0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.5); } 70% { box-shadow: 0 0 0 20px rgba(37, 211, 102, 0); } 100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); } }
-        
-        .dial-pad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 40px; }
-        .key { width: 60px; height: 60px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.3); background: rgba(255,255,255,0.1); color: white; font-size: 20px; cursor: pointer; }
-        .end-btn { width: 70px; height: 70px; background: #ff3b30; border-radius: 50%; border: none; color: white; font-size: 30px; margin-top: auto; margin-bottom: 50px; cursor: pointer; }
+        .user { background: var(--wa-light); align-self: flex-end; border-top-right-radius: 0; animation: slideIn 0.3s ease-out; }
+        @keyframes slideIn { from { transform: translateY(10px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        .chip-group { display: flex; gap: 10px; margin-top: 10px; flex-wrap: wrap; }
+        .chip { background: white; border: 1.5px solid var(--wa-teal); color: var(--wa-teal); padding: 10px 18px; border-radius: 25px; font-size: 14px; font-weight: 600; cursor: pointer; transition: 0.2s; }
+        .input-bar { padding: 10px 15px; background: #f0f0f0; display: flex; align-items: center; gap: 10px; min-height: 70px; flex-shrink: 0; border-top: 1px solid #ddd; }
+        .text-input { flex: 1; padding: 12px 20px; border-radius: 30px; border: 1px solid #ccc; outline: none; font-size: 16px; background: #fff; }
+        .send-btn { width: 50px; height: 50px; background: var(--wa-teal); color: white; border: none; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -108,202 +35,175 @@
             <div class="avatar">🛡️</div>
             <div><b>Suraksha Vigil</b><br><small>Online</small></div>
         </div>
-        <div onclick="startCall()" style="cursor:pointer; font-size: 22px;">📞</div>
+        <button class="call-btn" onclick="startCall()">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+        </button>
+    </div>
+    
+    <div class="progress-container">
+        <div class="progress-bar" id="pbar"></div>
     </div>
 
     <div class="chat-window" id="chat">
         <div class="bubble bot">
-            नमस्कार 👋 मी Suraksha Vigil Bot आहे.
-            रिपोर्टिंग करण्यासाठी भाषा निवडा:
-            <div class="chip-group">
-                <div class="chip" onclick="initChat('mr')">मराठी</div>
-                <div class="chip" onclick="initChat('en')">English</div>
+            नमस्कार 👋 'सुरक्षा विजिल' मध्ये आपले स्वागत आहे.
+            कृपया आपली भाषा निवडा / Choose Language:
+            <div class="chip-group" id="langChips">
+                <div class="chip" onclick="setLang('mr')">मराठी 🇮🇳</div>
+                <div class="chip" onclick="setLang('en')">English 🇺🇸</div>
             </div>
         </div>
     </div>
 
     <div class="input-bar" id="inputBar" style="display:none;">
         <input type="text" id="userInput" class="text-input" placeholder="टाईप करा..." onkeypress="if(event.key==='Enter') send()">
-        <button class="icon-btn" onclick="send()">
-            <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"></path></svg>
+        <button class="send-btn" onclick="send()">
+            <svg viewBox="0 0 24 24" width="24" fill="white"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"></path></svg>
         </button>
-        <button class="icon-btn" style="background:#555; margin-left:5px;" onclick="startRecognition()">🎤</button>
-    </div>
-
-    <div class="call-ui" id="callUi">
-        <div class="call-profile" id="callAv">🛡️</div>
-        <h2 id="callTitle">Suraksha Vigil</h2>
-        <p id="callStatus">Connecting...</p>
-        <div class="dial-pad" id="dialer">
-            <button class="key" onclick="pressKey(1)">1</button>
-            <button class="key" onclick="pressKey(2)">2</button>
-            <button class="key" onclick="pressKey(3)">3</button>
-        </div>
-        <button class="end-btn" onclick="endCall()">✖</button>
     </div>
 </div>
 
-<audio id="beep" src="https://assets.mixkit.co/active_storage/sfx/2357/2357-preview.mp3"></audio>
-
 <script>
 let step = 0;
-let data = {};
-let lang = "en";
-let isCall = false;
-let isRep = false;
-let synth = window.speechSynthesis;
-let rec;
+let reportData = {};
+let lang = "mr";
+let finalSource = "Web Chat"; 
+const scriptURL = "https://script.google.com/macros/s/AKfycbwHdpYghnTnc0KDd8rGwldWbNvm--QZAJmhGeTFj1KyBQ0TnnXGJnnoEJFC7fYn1Z53xQ/exec";
 
-const q_en = [
-    "Choose language (EN/MR)",
-    "Who are you reporting as? (Patient/Doctor/Pharmacist/Student)",
-    "Can you tell me your village or city? 📍",
-    "Patient name?",
-    "Patient age?",
-    "Gender?",
-    "Which medicine was taken? 💊",
-    "What side effect did you notice?",
-    "When did it start?",
-    "How serious was it? (Mild/Moderate/Severe)",
-    "Did patient need hospital visit?",
-    "Any other diseases or medicines?"
-];
+const langMap = {
+    "रुग्ण (Patient)": "Patient", "डॉक्टर": "Doctor", "फार्मासिस्ट": "Pharmacist", "विद्यार्थी": "Student",
+    "पुरुष (Male)": "Male", "महिला (Female)": "Female", "गोळी (Tablet)": "Tablet", "हो": "Yes", "नाही": "No"
+};
 
-const q_mr = [
-    "भाषा निवडा (EN/MR)",
-    "तुम्ही कोण म्हणून report करत आहात? (Patient/Doctor/Pharmacist/Student)",
-    "तुमचं गाव / शहर सांगाल का? 📍",
-    "रुग्णाचं नाव?",
-    "वय?",
-    "लिंग?",
-    "कोणतं औषध घेतलं होतं? 💊",
-    "काय त्रास जाणवला?",
-    "कधी सुरू झाला?",
-    "Severity किती होती? (Mild/Moderate/Severe)",
-    "Hospital ला जावं लागलं का?",
-    "इतर आजार किंवा औषधं आहेत का?"
-];
+const questions = {
+    mr: [
+        { q: "तुम्ही ही माहिती कोण म्हणून भरत आहात?", chips: ["रुग्ण (Patient)", "डॉक्टर", "फार्मासिस्ट", "विद्यार्थी"] },
+        { q: "तुमचे शहर किंवा गाव कोणते? 📍" },
+        { q: "रुग्णाचे नाव सांगा." },
+        { q: "वय किती आहे?" },
+        { q: "लिंग निवडा:", chips: ["पुरुष (Male)", "महिला (Female)"] },
+        { q: "औषधाचा प्रकार निवडा:", chips: ["गोळी (Tablet)", "इंजेक्शन", "क्रीम", "सिरप"] },
+        { q: "औषधाचे नाव काय होते?" },
+        { q: "काय त्रास झाला?", chips: ["चक्कर 😵", "खाज 😣", "ताप 🤒", "मळमळ 🤮"] },
+        { q: "कधी सुरू झाला?" },
+        { q: "तीव्रता किती होती?", chips: ["सौम्य", "मध्यम", "गंभीर"] },
+        { q: "हॉस्पिटलला जावे लागले का?", chips: ["हो", "नाही"] }
+    ]
+};
 
-function initChat(l) {
-    lang = l;
-    document.getElementById('inputBar').style.display = 'flex';
-    userMsg(l==='mr'?'मराठी':'English');
-    step = 0;
-    next();
+function startCall() {
+    botMsg("📞 सुरक्षा विजिल हेल्पलाइनमध्ये तुमचे स्वागत आहे...\n\nखालील पर्याय निवडा:\n1️⃣ ADR रिपोर्टिंग का गरजेचे आहे?\n2️⃣ रिपोर्टिंगचे फायदे.\n3️⃣ सुरक्षा विजिल प्रोजेक्टबद्दल.\n4️⃣ फोनद्वारे ADR रिपोर्ट करा.\n5️⃣ पुन्हा ऐकण्यासाठी.");
+    showCallChips();
 }
 
-function botMsg(t) {
-    let div = document.createElement("div");
-    div.className = "bubble bot";
-    div.innerText = t;
-    document.getElementById("chat").appendChild(div);
-    scrollDown();
+function showCallChips() {
+    let grp = document.createElement("div");
+    grp.className = "chip-group";
+    ["1", "2", "3", "4", "5"].forEach(num => {
+        let c = document.createElement("div");
+        c.className = "chip"; c.innerText = num;
+        c.onclick = () => handleCallInput(num);
+        grp.appendChild(c);
+    });
+    document.getElementById("chat").appendChild(grp);
+    scroll();
 }
 
-function userMsg(t) {
-    let div = document.createElement("div");
-    div.className = "bubble user";
-    div.innerText = t;
-    document.getElementById("chat").appendChild(div);
-    scrollDown();
-}
-
-function scrollDown() {
-    const chat = document.getElementById("chat");
-    chat.scrollTop = chat.scrollHeight;
-}
-
-function next() {
-    step++;
-    let q = lang === "mr" ? q_mr : q_en;
-    if(step < q.length) {
-        setTimeout(() => {
-            botMsg(q[step]);
-            if(isCall) botSpeak(q[step]);
-        }, 600);
-    } else {
-        botMsg(lang === "mr" ? "🙏 धन्यवाद! तुमचा रिपोर्ट नोंदवला गेला आहे." : "🙏 Thank you! Your report is submitted.");
-        if(isCall) {
-            botSpeak("Thank you, report saved.");
-            setTimeout(endCall, 2500);
-        }
+function handleCallInput(val) {
+    userMsg(val);
+    if(val === "1") {
+        botMsg("💡 ADR रिपोर्टिंग का करावे?\nऔषधांचे दुष्परिणाम शोधून इतरांना सावध करण्यासाठी आणि औषध अधिक सुरक्षित बनवण्यासाठी रिपोर्टिंग गरजेचे आहे.");
+    } else if(val === "2") {
+        botMsg("✅ रिपोर्टिंगचे फायदे:\nयामुळे भविष्यातील गंभीर वैद्यकीय धोके टाळता येतात आणि आरोग्य यंत्रणेत सुधारणा होते.");
+    } else if(val === "3") {
+        botMsg("🏢 प्रोजेक्ट माहिती:\nहा 'सुरक्षा विजिल' प्रोजेक्ट **डॉ. भूषण पवार सर** यांच्या मार्गदर्शनाखाली साकारला आहे. त्यांच्या प्रेरणेमुळेच आपण आज हे ADR रिपोर्टिंग पोर्टल यशस्वीपणे चालवत आहोत. धन्यवाद सर! 🙏");
+    } else if(val === "4") {
+        finalSource = "IVR Call";
+        botMsg("🔔 फोन रिंग वाजत आहे... आमचे रिपोर्टिंग एजंट 'Bot' तुमच्याशी संवाद साधेल.");
+        setTimeout(() => { 
+            botMsg("नमस्ते, मी रिपोर्टिंग एजंट. चला माहिती भरूया...");
+            setLang('mr'); 
+        }, 2000);
+        return;
+    } else if(val === "5") {
+        startCall();
+        return;
     }
+    setTimeout(showCallChips, 1000);
+}
+
+function setLang(l) {
+    lang = l;
+    document.getElementById('langChips').style.display = 'none';
+    document.getElementById('inputBar').style.display = 'flex';
+    step = 0;
+    askQ();
+}
+
+function askQ() {
+    updateProgress();
+    let qList = questions.mr; 
+    if (step < qList.length) {
+        let cur = qList[step];
+        botMsg(cur.q);
+        if (cur.chips) {
+            let grp = document.createElement("div");
+            grp.className = "chip-group";
+            cur.chips.forEach(txt => {
+                let c = document.createElement("div");
+                c.className = "chip"; c.innerText = txt;
+                c.onclick = () => { grp.remove(); handleInput(txt); };
+                grp.appendChild(c);
+            });
+            document.getElementById("chat").appendChild(grp);
+            scroll();
+        }
+    } else {
+        botMsg("🔄 डेटा सेव्ह होत आहे...");
+        sendToSheet(reportData);
+    }
+}
+
+function handleInput(v) {
+    userMsg(v);
+    let cleanVal = v.split(' ')[0];
+    reportData["step_" + step] = langMap[cleanVal] || v;
+    step++;
+    setTimeout(askQ, 600);
 }
 
 function send() {
     let inp = document.getElementById("userInput");
-    let val = inp.value.trim();
-    if(!val) return;
-    userMsg(val);
-    data["step_"+step] = val;
+    if (!inp.value.trim()) return;
+    handleInput(inp.value);
     inp.value = "";
-    inp.focus(); // Key feature: Keeps keyboard open
-    next();
 }
 
-function botSpeak(t) {
-    synth.cancel();
-    let m = new SpeechSynthesisUtterance(t);
-    m.lang = lang === 'mr' ? 'mr-IN' : 'en-US';
-    m.onend = () => { if(isCall && isRep) startRecognition(); };
-    synth.speak(m);
-}
-
-function startRecognition() {
-    const Speech = window.webkitSpeechRecognition || window.SpeechRecognition;
-    if(!Speech) return;
-    rec = new Speech();
-    rec.lang = lang === 'mr' ? 'mr-IN' : 'en-US';
-    rec.onstart = () => {
-        document.getElementById('callAv').classList.add('pulse');
-        document.getElementById('callStatus').innerText = "Listening...";
-    };
-    rec.onresult = (e) => {
-        let res = e.results[0][0].transcript;
-        userMsg(res);
-        data["step_"+step] = res;
-        next();
-    };
-    rec.onend = () => {
-        document.getElementById('callAv').classList.remove('pulse');
-        if(isCall && isRep && !synth.speaking) {
-            setTimeout(() => { if(isCall && isRep) rec.start(); }, 1500);
-        }
-    };
-    rec.start();
-}
-
-function startCall() {
-    isCall = true;
-    document.getElementById('callUi').style.display = 'flex';
-    botSpeak("Welcome to Suraksha Vigil. Press 1 to start.");
-}
-
-function pressKey(k) {
-    if(k === 1) {
-        isRep = true;
-        document.getElementById('dialer').style.display = 'none';
-        step = 0;
-        next();
-    }
-}
-
-function endCall() {
-    document.getElementById('beep').play();
-    isCall = false; isRep = false;
-    document.getElementById('callUi').style.display = 'none';
-    document.getElementById('dialer').style.display = 'grid';
-    synth.cancel();
-    if(rec) rec.abort();
-}
-
-// Fix for Visual Viewport (Keyboard behavior)
-if (window.visualViewport) {
-    window.visualViewport.addEventListener('resize', () => {
-        document.getElementById('mainContainer').style.height = window.visualViewport.height + 'px';
-        scrollDown();
+function sendToSheet(finalData) {
+    finalData["source"] = finalSource;
+    fetch(scriptURL, { method: "POST", mode: "no-cors", body: JSON.stringify(finalData) })
+    .then(() => {
+        botMsg("✅ रिपोर्ट यशस्वीपणे सेव्ह झाला! कॉल कट होत आहे... धन्यवाद!");
+        setTimeout(() => { location.reload(); }, 3000);
     });
 }
+
+function updateProgress() {
+    let percent = (step / questions.mr.length) * 100;
+    document.getElementById('pbar').style.width = percent + "%";
+}
+
+function botMsg(t) {
+    let d = document.createElement("div"); d.className = "bubble bot"; d.innerText = t;
+    document.getElementById("chat").appendChild(d); scroll();
+}
+
+function userMsg(t) {
+    let d = document.createElement("div"); d.className = "bubble user"; d.innerText = t;
+    document.getElementById("chat").appendChild(d); scroll();
+}
+
+function scroll() { let c = document.getElementById("chat"); c.scrollTop = c.scrollHeight; }
 </script>
 </body>
 </html>
