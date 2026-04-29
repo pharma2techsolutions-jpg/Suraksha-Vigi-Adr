@@ -80,11 +80,6 @@ padding:8px 14px;
 border-radius:20px;
 cursor:pointer;
 font-size:14px;
-transition:.2s;
-}
-
-.helpline-btn:hover{
-background:rgba(255,255,255,.22);
 }
 
 /* CHAT */
@@ -95,12 +90,8 @@ overflow-y:auto;
 padding:12px;
 display:flex;
 flex-direction:column;
-background:#e5ddd5;
+background:#efeae2;
 scroll-behavior:smooth;
-background-image:
-linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px),
-linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px);
-background-size:22px 22px;
 }
 
 .msg{
@@ -112,7 +103,6 @@ font-size:14px;
 line-height:1.5;
 animation:fade .2s ease;
 word-wrap:break-word;
-position:relative;
 }
 
 @keyframes fade{
@@ -130,14 +120,12 @@ transform:translateY(0);
 background:white;
 align-self:flex-start;
 border-top-left-radius:0;
-box-shadow:0 1px 2px rgba(0,0,0,.08);
 }
 
 .user{
 background:#d9fdd3;
 align-self:flex-end;
 border-top-right-radius:0;
-box-shadow:0 1px 2px rgba(0,0,0,.08);
 }
 
 .time{
@@ -151,44 +139,32 @@ text-align:right;
 
 .input-area{
 display:flex;
-padding:10px;
+padding:8px;
 background:#f0f2f5;
 align-items:center;
-gap:6px;
-position:sticky;
-bottom:0;
-z-index:50;
-border-top:1px solid #ddd;
 }
 
 input{
 flex:1;
-padding:13px 16px;
+padding:12px;
 border:none;
 border-radius:25px;
 outline:none;
 font-size:14px;
 background:white;
-box-shadow:0 1px 2px rgba(0,0,0,.08);
 }
 
 .send,
 .mic{
-width:46px;
-height:46px;
+width:44px;
+height:44px;
 border:none;
 border-radius:50%;
 background:#075e54;
 color:white;
+margin-left:6px;
 font-size:18px;
 cursor:pointer;
-transition:.2s;
-flex-shrink:0;
-}
-
-.send:hover,
-.mic:hover{
-transform:scale(1.05);
 }
 
 /* CHIPS */
@@ -308,10 +284,6 @@ height:100vh;
 border-radius:0;
 }
 
-.chat{
-padding-bottom:20px;
-}
-
 }
 
 </style>
@@ -346,7 +318,7 @@ padding-bottom:20px;
 
 <div class="chat" id="chat"></div>
 
-<!-- INPUT FOOTER -->
+<!-- INPUT -->
 
 <div class="input-area">
 
@@ -354,7 +326,6 @@ padding-bottom:20px;
 type="text" 
 id="input" 
 placeholder="Type message..."
-autocomplete="off"
 onkeypress="if(event.key==='Enter') send()"
 >
 
@@ -404,19 +375,6 @@ let data={};
 let chatStarted=false;
 
 const chat=document.getElementById("chat");
-const input=document.getElementById("input");
-
-/* AUTO SCROLL */
-
-function scrollBottom(){
-
-setTimeout(()=>{
-
-chat.scrollTop=chat.scrollHeight;
-
-},100);
-
-}
 
 /* QUESTIONS */
 
@@ -482,11 +440,11 @@ div.className="msg "+type;
 
 div.innerHTML=
 msg+
-`<div class="time">${new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}</div>`;
+`<div class="time">${new Date().toLocaleTimeString()}</div>`;
 
 chat.appendChild(div);
 
-scrollBottom();
+chat.scrollTop=chat.scrollHeight;
 
 }
 
@@ -527,8 +485,6 @@ addMsg(`
 
 showLanguageButtons();
 
-input.focus();
-
 };
 
 /* LANGUAGE BUTTONS */
@@ -543,7 +499,7 @@ let mr=document.createElement("button");
 
 mr.className="chip";
 
-mr.innerText="🇮🇳 Marathi";
+mr.innerText="🇮🇳 मराठी";
 
 mr.onclick=()=>{
 
@@ -576,8 +532,6 @@ wrap.appendChild(mr);
 wrap.appendChild(en);
 
 chat.appendChild(wrap);
-
-scrollBottom();
 
 }
 
@@ -691,7 +645,7 @@ wrap.appendChild(b);
 
 chat.appendChild(wrap);
 
-scrollBottom();
+chat.scrollTop=chat.scrollHeight;
 
 }
 
@@ -699,13 +653,11 @@ scrollBottom();
 
 function handleInput(v){
 
-let qs=lang==="mr" ? mrQuestions : enQuestions;
-
-if(step>=qs.length) return;
+if(step>=11) return;
 
 addMsg(v,"user");
 
-data["Q"+(step+1)]=v;
+data["Q"+step]=v;
 
 step++;
 
@@ -724,15 +676,13 @@ return;
 
 }
 
-let val=input.value.trim();
+let val=document.getElementById("input").value.trim();
 
 if(!val) return;
 
 handleInput(val);
 
-input.value="";
-
-input.focus();
+document.getElementById("input").value="";
 
 }
 
@@ -804,6 +754,8 @@ speak(welcome);
 
 function dialOption(n){
 
+/* OPTION 1 */
+
 if(n==1){
 
 let msg=
@@ -838,6 +790,8 @@ endCall();
 
 }
 
+/* OPTION 2 */
+
 else if(n==2){
 
 let msg=
@@ -869,6 +823,8 @@ endCall();
 },50000);
 
 }
+
+/* OPTION 3 */
 
 else if(n==3){
 
