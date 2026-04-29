@@ -1,51 +1,45 @@
 <!-- =========================
-SURAKSHA VIGIL BOT
-FINAL ADVANCED VERSION
+SURAKSHA VIGIL BOT - FINAL
 ========================= -->
 
 <!DOCTYPE html>
-<html lang="mr">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Suraksha Vigil Bot</title>
 
 <style>
 
 body{
 margin:0;
-font-family:Arial;
-background:#111b21;
+font-family:Arial,sans-serif;
+background:#0b141a;
 display:flex;
 justify-content:center;
 align-items:center;
 height:100vh;
 }
 
-/* APP */
-
 .app{
-width:430px;
+width:420px;
 height:95vh;
 background:#efeae2;
 display:flex;
 flex-direction:column;
 overflow:hidden;
-border-radius:18px;
-box-shadow:0 0 25px rgba(0,0,0,.5);
+border-radius:15px;
+box-shadow:0 0 25px rgba(0,0,0,.4);
 position:relative;
 }
 
-/* HEADER */
-
 .header{
 background:#075e54;
+color:white;
 padding:10px;
 display:flex;
 justify-content:space-between;
 align-items:center;
-color:white;
 }
 
 .left{
@@ -54,25 +48,22 @@ align-items:center;
 }
 
 .dp{
-width:42px;
-height:42px;
-background:white;
+width:40px;
+height:40px;
 border-radius:50%;
+background:white;
 display:flex;
 justify-content:center;
 align-items:center;
-font-size:22px;
 margin-right:10px;
+font-size:20px;
 }
 
-.icons{
-display:flex;
-gap:15px;
+.icons span{
+margin-left:15px;
 font-size:20px;
 cursor:pointer;
 }
-
-/* CHAT */
 
 .chat{
 flex:1;
@@ -84,12 +75,18 @@ background:#efeae2;
 }
 
 .msg{
-max-width:75%;
-padding:10px;
-border-radius:10px;
+max-width:78%;
+padding:10px 12px;
 margin:5px 0;
+border-radius:10px;
 font-size:14px;
-line-height:1.4;
+line-height:1.5;
+animation:fade .2s ease;
+}
+
+@keyframes fade{
+from{opacity:0;transform:translateY(5px);}
+to{opacity:1;transform:translateY(0);}
 }
 
 .bot{
@@ -107,11 +104,9 @@ border-top-right-radius:0;
 .time{
 font-size:10px;
 color:gray;
-margin-top:4px;
 text-align:right;
+margin-top:4px;
 }
-
-/* INPUT */
 
 .input-area{
 display:flex;
@@ -128,65 +123,55 @@ outline:none;
 }
 
 button{
+margin-left:5px;
 border:none;
-cursor:pointer;
-}
-
-.send,.mic{
+border-radius:50%;
 width:42px;
 height:42px;
-border-radius:50%;
+cursor:pointer;
 background:#075e54;
 color:white;
 font-size:18px;
-margin-left:5px;
 }
-
-/* CHIPS */
 
 .chips{
 display:flex;
 flex-wrap:wrap;
 gap:8px;
-margin:6px 0;
+margin:8px 0;
 }
 
 .chip{
 background:#128c7e;
 color:white;
-padding:8px 14px;
-border-radius:18px;
-font-size:13px;
 border:none;
+padding:10px 14px;
+border-radius:20px;
 cursor:pointer;
-transition:.2s;
+font-size:13px;
+width:auto;
+height:auto;
 }
-
-.chip:hover{
-transform:scale(1.05);
-}
-
-/* CALL SCREEN */
 
 .call-screen{
 position:absolute;
 inset:0;
-background:#0b141a;
-color:white;
+background:#075e54;
 display:none;
 flex-direction:column;
 justify-content:center;
 align-items:center;
-padding:20px;
+color:white;
 text-align:center;
-z-index:100;
+padding:20px;
+z-index:999;
 }
 
 .call-avatar{
-width:110px;
-height:110px;
+width:120px;
+height:120px;
 border-radius:50%;
-background:#075e54;
+background:white;
 display:flex;
 justify-content:center;
 align-items:center;
@@ -201,37 +186,22 @@ animation:pulse 1.5s infinite;
 100%{transform:scale(1);}
 }
 
-.call-status{
-margin-top:10px;
-font-size:15px;
-color:#ccc;
+.calling{
+font-size:20px;
+margin-bottom:10px;
 }
 
-/* DIAL PAD */
+.ringing{
+font-size:14px;
+opacity:.8;
+}
 
-.dialpad{
-display:grid;
-grid-template-columns:repeat(3,70px);
-gap:12px;
+.end{
 margin-top:30px;
-}
-
-.dial-btn{
-width:70px;
-height:70px;
-border-radius:50%;
-background:#202c33;
-color:white;
-font-size:25px;
-border:none;
-}
-
-.end-call{
-margin-top:30px;
+width:auto;
+border-radius:20px;
+padding:10px 25px;
 background:red;
-color:white;
-padding:12px 25px;
-border-radius:25px;
 font-size:16px;
 }
 
@@ -271,43 +241,25 @@ font-size:16px;
 
 <div class="input-area">
 
-<input type="text" id="input" placeholder="Type message...">
+<input id="input" placeholder="Type message...">
 
-<button class="send" onclick="send()">➤</button>
+<button onclick="send()">➤</button>
 
-<button class="mic" onclick="voiceInput()">🎤</button>
+<button onclick="voiceInput()">🎤</button>
 
 </div>
 
-<!-- CALL UI -->
+<!-- CALL -->
 
 <div class="call-screen" id="callScreen">
 
 <div class="call-avatar">🛡️</div>
 
-<h2>Suraksha Vigil Helpline</h2>
+<div class="calling">Suraksha Vigil Helpline</div>
 
-<div class="call-status" id="callText">
-Connecting...
-</div>
+<div class="ringing">Voice Assistant Active...</div>
 
-<!-- DIAL PAD -->
-
-<div class="dialpad">
-
-<button class="dial-btn" onclick="menuOption(1)">1</button>
-
-<button class="dial-btn" onclick="menuOption(2)">2</button>
-
-<button class="dial-btn" onclick="menuOption(3)">3</button>
-
-<button class="dial-btn" onclick="menuOption(4)">4</button>
-
-<button class="dial-btn" onclick="menuOption(5)">5</button>
-
-</div>
-
-<button class="end-call" onclick="endCall()">End Call</button>
+<button class="end" onclick="endCall()">End Call</button>
 
 </div>
 
@@ -315,37 +267,63 @@ Connecting...
 
 <script>
 
-/* VARIABLES */
-
-let lang="mr";
+let lang="";
 let step=0;
-let mode="chat";
+let data={};
 
 const chat=document.getElementById("chat");
 
 /* QUESTIONS */
 
-const questions=[
+const mrQuestions=[
 
-"तुम्ही कोण आहात?",
+{q:"तुम्ही ही माहिती कोण म्हणून भरत आहात?",chips:["रुग्ण","डॉक्टर","फार्मासिस्ट","विद्यार्थी"]},
 
-"तुमचे गाव कोणते?",
+{q:"तुमचे गाव किंवा शहर कोणते? 📍"},
 
-"रुग्णाचे नाव काय आहे?",
+{q:"रुग्णाचे नाव काय आहे?"},
 
-"वय किती आहे?",
+{q:"रुग्णाचे वय किती आहे?"},
 
-"लिंग काय आहे?",
+{q:"लिंग निवडा:",chips:["पुरुष","महिला"]},
 
-"कोणते औषध घेतले होते?",
+{q:"कोणत्या प्रकारचे औषध होते?",chips:["गोळी","सिरप","इंजेक्शन","क्रीम"]},
 
-"काय त्रास झाला?",
+{q:"औषधाचे नाव काय होते?"},
 
-"कधी सुरू झाला?",
+{q:"काय त्रास झाला?",chips:["चक्कर 😵","खाज 😣","ताप 🤒","मळमळ 🤮"]},
 
-"त्रास किती गंभीर होता?",
+{q:"हा त्रास कधी सुरू झाला?"},
 
-"हॉस्पिटलला जावे लागले का?"
+{q:"त्रास किती गंभीर होता?",chips:["सौम्य","मध्यम","गंभीर"]},
+
+{q:"हॉस्पिटलला जावे लागले का?",chips:["हो","नाही"]}
+
+];
+
+const enQuestions=[
+
+{q:"Who are you reporting as?",chips:["Patient","Doctor","Pharmacist","Student"]},
+
+{q:"Which city or village are you from? 📍"},
+
+{q:"What is the patient name?"},
+
+{q:"What is the patient age?"},
+
+{q:"Select gender:",chips:["Male","Female"]},
+
+{q:"What type of medicine was it?",chips:["Tablet","Syrup","Injection","Cream"]},
+
+{q:"What was the medicine name?"},
+
+{q:"What side effect happened?",chips:["Dizziness 😵","Itching 😣","Fever 🤒","Nausea 🤮"]},
+
+{q:"When did it start?"},
+
+{q:"How severe was it?",chips:["Mild","Moderate","Severe"]},
+
+{q:"Was hospital visit needed?",chips:["Yes","No"]}
 
 ];
 
@@ -367,23 +345,157 @@ chat.scrollTop=chat.scrollHeight;
 
 /* SPEAK */
 
-function speak(text){
+function speak(t){
 
-let s=new SpeechSynthesisUtterance(text);
+speechSynthesis.cancel();
 
-s.lang="mr-IN";
+let s=new SpeechSynthesisUtterance(t);
+
+s.lang=lang==="en" ? "en-US" : "mr-IN";
 
 speechSynthesis.speak(s);
 
 }
 
-/* START */
+/* WELCOME */
 
 window.onload=()=>{
 
-addMsg("नमस्कार 👋<br><br>Suraksha Vigil Bot मध्ये तुमचे स्वागत आहे.<br><br>ADR reporting साठी खालील पर्याय वापरा.","bot");
+addMsg(`
+<b>🛡️ Welcome to Suraksha Vigil Bot</b><br><br>
 
-showChips(["ADR म्हणजे काय?","ADR reporting चे फायदे","Project माहिती","Voice ADR Reporting"]);
+💊 Smart ADR Reporting & Drug Safety Awareness Assistant.<br><br>
+
+👉 कृपया भाषा निवडा / Please choose language.
+`,"bot");
+
+showLangButtons();
+
+};
+
+/* LANGUAGE BUTTONS */
+
+function showLangButtons(){
+
+let wrap=document.createElement("div");
+
+wrap.className="chips";
+
+let mr=document.createElement("button");
+
+mr.className="chip";
+
+mr.innerText="🇮🇳 मराठी";
+
+mr.onclick=()=>{
+
+lang="mr";
+
+addMsg("🇮🇳 मराठी निवडली","user");
+
+startChat();
+
+};
+
+let en=document.createElement("button");
+
+en.className="chip";
+
+en.innerText="🇬🇧 English";
+
+en.onclick=()=>{
+
+lang="en";
+
+addMsg("🇬🇧 English Selected","user");
+
+startChat();
+
+};
+
+wrap.appendChild(mr);
+
+wrap.appendChild(en);
+
+chat.appendChild(wrap);
+
+}
+
+/* START CHAT */
+
+function startChat(){
+
+if(lang==="mr"){
+
+addMsg(`
+🙏 नमस्कार!<br><br>
+
+मी तुमची ADR Reporting मध्ये मदत करेन.<br><br>
+
+📌 कृपया खालील माहिती द्या.
+`,"bot");
+
+}
+
+else{
+
+addMsg(`
+🙏 Hello!<br><br>
+
+I will help you with ADR Reporting.<br><br>
+
+📌 Please provide the following details.
+`,"bot");
+
+}
+
+step=0;
+
+setTimeout(()=>{
+
+askQuestion();
+
+},700);
+
+}
+
+/* ASK */
+
+function askQuestion(){
+
+let qs=lang==="mr" ? mrQuestions : enQuestions;
+
+if(step<qs.length){
+
+addMsg(qs[step].q,"bot");
+
+if(qs[step].chips){
+
+showChips(qs[step].chips);
+
+}
+
+}
+
+else{
+
+addMsg(
+
+lang==="mr"
+
+?
+
+"✅ तुमचा ADR Report यशस्वीरित्या नोंदवला गेला आहे.<br><br>🙏 औषध सुरक्षिततेसाठी तुमचे योगदान महत्त्वाचे आहे."
+
+:
+
+"✅ Your ADR Report has been submitted successfully.<br><br>🙏 Your contribution helps improve medicine safety."
+
+,"bot");
+
+sendToSheet(data);
+
+}
 
 }
 
@@ -403,7 +515,7 @@ b.className="chip";
 
 b.innerText=x;
 
-b.onclick=()=>chipAction(x);
+b.onclick=()=>handleInput(x);
 
 wrap.appendChild(b);
 
@@ -413,47 +525,17 @@ chat.appendChild(wrap);
 
 }
 
-/* CHIP ACTION */
+/* HANDLE */
 
-function chipAction(x){
+function handleInput(v){
 
-addMsg(x,"user");
+addMsg(v,"user");
 
-if(x==="ADR म्हणजे काय?"){
+data["Q"+step]=v;
 
-let msg="ADR म्हणजे औषध घेतल्यानंतर होणारा अनपेक्षित त्रास किंवा दुष्परिणाम. ADR reporting मुळे औषध सुरक्षितता वाढते आणि भविष्यातील गंभीर धोके टाळता येतात.";
+step++;
 
-addMsg(msg,"bot");
-
-speak(msg);
-
-}
-
-else if(x==="ADR reporting चे फायदे"){
-
-let msg="ADR reporting मुळे डॉक्टर आणि आरोग्य विभागाला औषधांचे दुष्परिणाम समजतात. त्यामुळे रुग्णांची सुरक्षितता वाढते, नवीन चेतावणी देता येते आणि गंभीर परिणाम टाळता येतात.";
-
-addMsg(msg,"bot");
-
-speak(msg);
-
-}
-
-else if(x==="Project माहिती"){
-
-let msg="Suraksha Vigil हा आधुनिक ADR reporting project आहे. या project साठी Doctor Bhushan Pawar Sir यांनी आम्हाला अमूल्य मार्गदर्शन केले. त्यांच्या प्रेरणेमुळे आणि योग्य दिशेमुळे आम्ही ADR reporting साठी एक स्मार्ट voice आणि chatbot आधारित portal तयार करू शकलो. औषध सुरक्षिततेबद्दल जनजागृती करणे आणि ADR reporting अधिक सोपी करणे हे या project चे मुख्य उद्दिष्ट आहे.";
-
-addMsg(msg,"bot");
-
-speak(msg);
-
-}
-
-else if(x==="Voice ADR Reporting"){
-
-startCall();
-
-}
+askQuestion();
 
 }
 
@@ -465,7 +547,7 @@ let v=input.value.trim();
 
 if(!v)return;
 
-addMsg(v,"user");
+handleInput(v);
 
 input.value="";
 
@@ -477,145 +559,29 @@ function voiceInput(){
 
 let r=new webkitSpeechRecognition();
 
-r.lang="mr-IN";
+r.lang=lang==="en" ? "en-IN" : "mr-IN";
 
 r.start();
 
 r.onresult=e=>{
 
-let text=e.results[0][0].transcript;
+let t=e.results[0][0].transcript;
 
-addMsg(text,"user");
+handleInput(t);
 
 };
 
 }
 
-/* CALL START */
+/* CALL */
 
 function startCall(){
 
-mode="call";
-
 document.getElementById("callScreen").style.display="flex";
 
-document.getElementById("callText").innerText="Calling Suraksha Vigil Helpline...";
-
-setTimeout(()=>{
-
-let msg="नमस्कार. Suraksha Vigil Helpline मध्ये तुमचे स्वागत आहे. ADR म्हणजे काय हे जाणून घेण्यासाठी 1 दाबा. ADR reporting चे फायदे जाणून घेण्यासाठी 2 दाबा. Project माहिती साठी 3 दाबा. Voice ADR reporting साठी 4 दाबा. पुन्हा सर्व पर्याय ऐकण्यासाठी 5 दाबा.";
-
-document.getElementById("callText").innerText="Voice Assistant Active";
+let msg="नमस्कार. Suraksha Vigil Helpline मध्ये तुमचे स्वागत आहे. ADR म्हणजे औषध घेतल्यानंतर होणारा दुष्परिणाम. Drug Drug Interaction म्हणजे दोन औषधे एकत्र घेतल्यामुळे होणारा परिणाम. औषधे डॉक्टरांच्या सल्ल्यानेच घ्यावीत. ADR reporting मुळे रुग्णांची सुरक्षितता वाढते.";
 
 speak(msg);
-
-},2000);
-
-}
-
-/* MENU */
-
-function menuOption(n){
-
-if(n==1){
-
-let msg="ADR म्हणजे Adverse Drug Reaction. म्हणजे औषध घेतल्यानंतर शरीरावर होणारा अनपेक्षित दुष्परिणाम. ADR reporting मुळे औषध सुरक्षितता वाढते आणि भविष्यातील गंभीर त्रास टाळता येतो.";
-
-document.getElementById("callText").innerText=msg;
-
-speak(msg);
-
-}
-
-else if(n==2){
-
-let msg="ADR reporting चे अनेक फायदे आहेत. त्यामुळे औषधांचे दुष्परिणाम लवकर ओळखता येतात, डॉक्टरांना योग्य माहिती मिळते, रुग्णांची सुरक्षितता वाढते आणि आरोग्य व्यवस्थेमध्ये सुधारणा होते.";
-
-document.getElementById("callText").innerText=msg;
-
-speak(msg);
-
-}
-
-else if(n==3){
-
-let msg="Suraksha Vigil हा एक innovative ADR reporting project आहे. या project साठी Doctor Bhushan Pawar Sir यांनी आम्हाला उत्कृष्ट मार्गदर्शन केले. त्यांच्या अनुभवामुळे आणि प्रेरणेमुळे आम्ही voice based आणि chatbot based ADR reporting system तयार करण्यात यशस्वी झालो. औषध सुरक्षिततेबद्दल जागरूकता निर्माण करणे हे या project चे मुख्य उद्दिष्ट आहे.";
-
-document.getElementById("callText").innerText=msg;
-
-speak(msg);
-
-}
-
-else if(n==4){
-
-document.getElementById("callText").innerText="Connecting to ADR Reporting Agent...";
-
-speak("कृपया थांबा. तुमची कॉल आमच्या ADR reporting agent शी जोडली जात आहे.");
-
-setTimeout(()=>{
-
-step=0;
-
-askCallQuestion();
-
-},4000);
-
-}
-
-else if(n==5){
-
-startCall();
-
-}
-
-}
-
-/* CALL QUESTIONS */
-
-function askCallQuestion(){
-
-if(step>=questions.length){
-
-let endmsg="तुमचा ADR report यशस्वीरित्या नोंदवला गेला आहे. धन्यवाद.";
-
-document.getElementById("callText").innerText=endmsg;
-
-speak(endmsg);
-
-return;
-
-}
-
-let q=questions[step];
-
-document.getElementById("callText").innerText=q;
-
-speak(q);
-
-let r=new webkitSpeechRecognition();
-
-r.lang="mr-IN";
-
-r.start();
-
-r.onresult=e=>{
-
-let ans=e.results[0][0].transcript;
-
-addMsg(q,"bot");
-
-addMsg(ans,"user");
-
-step++;
-
-setTimeout(()=>{
-
-askCallQuestion();
-
-},1000);
-
-};
 
 }
 
@@ -627,7 +593,19 @@ speechSynthesis.cancel();
 
 document.getElementById("callScreen").style.display="none";
 
-mode="chat";
+}
+
+/* SHEET */
+
+function sendToSheet(data){
+
+fetch("YOUR_GOOGLE_SCRIPT_URL",{
+
+method:"POST",
+
+body:JSON.stringify(data)
+
+});
 
 }
 
