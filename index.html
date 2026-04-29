@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
 
 <title>Suraksha Vigil Bot</title>
 
@@ -12,29 +12,27 @@
 margin:0;
 padding:0;
 box-sizing:border-box;
+-webkit-tap-highlight-color:transparent;
 }
 
-body{
+html,body{
+height:100%;
+overflow:hidden;
 font-family:Arial,sans-serif;
 background:#0b141a;
-display:flex;
-justify-content:center;
-align-items:center;
-height:100vh;
-overflow:hidden;
 }
 
 /* APP */
 
 .app{
-width:430px;
-height:95vh;
+width:100%;
+max-width:430px;
+height:100dvh;
+margin:auto;
 background:#efeae2;
 display:flex;
 flex-direction:column;
 overflow:hidden;
-border-radius:18px;
-box-shadow:0 0 30px rgba(0,0,0,.5);
 position:relative;
 }
 
@@ -48,6 +46,7 @@ display:flex;
 justify-content:space-between;
 align-items:center;
 flex-shrink:0;
+z-index:10;
 }
 
 .left{
@@ -98,14 +97,18 @@ display:flex;
 flex-direction:column;
 background:#e5ddd5;
 scroll-behavior:smooth;
+overscroll-behavior:contain;
+-webkit-overflow-scrolling:touch;
+
 background-image:
 linear-gradient(rgba(255,255,255,.04) 1px, transparent 1px),
 linear-gradient(90deg, rgba(255,255,255,.04) 1px, transparent 1px);
+
 background-size:22px 22px;
 }
 
 .chat::-webkit-scrollbar{
-width:5px;
+width:4px;
 }
 
 .chat::-webkit-scrollbar-thumb{
@@ -168,7 +171,8 @@ border-top:1px solid #ddd;
 flex-shrink:0;
 position:sticky;
 bottom:0;
-z-index:99;
+z-index:999;
+padding-bottom:calc(env(safe-area-inset-bottom) + 10px);
 }
 
 .input-box{
@@ -177,18 +181,21 @@ display:flex;
 align-items:center;
 background:white;
 border-radius:30px;
-padding:0 10px;
+padding:0 12px;
 box-shadow:0 1px 2px rgba(0,0,0,.08);
+min-height:48px;
 }
 
 .input-box input{
 flex:1;
-padding:13px 10px;
+padding:13px 6px;
 border:none;
 outline:none;
-font-size:14px;
+font-size:16px;
 background:transparent;
 }
+
+/* BUTTONS */
 
 .send,
 .mic{
@@ -204,9 +211,9 @@ transition:.2s;
 flex-shrink:0;
 }
 
-.send:hover,
-.mic:hover{
-transform:scale(1.05);
+.send:active,
+.mic:active{
+transform:scale(.95);
 }
 
 /* CHIPS */
@@ -229,8 +236,8 @@ cursor:pointer;
 transition:.2s;
 }
 
-.chip:hover{
-transform:scale(1.04);
+.chip:active{
+transform:scale(.95);
 }
 
 /* CALL SCREEN */
@@ -298,11 +305,6 @@ color:#075e54;
 font-size:28px;
 font-weight:bold;
 cursor:pointer;
-transition:.2s;
-}
-
-.dial-btn:hover{
-transform:scale(1.05);
 }
 
 .end{
@@ -325,13 +327,12 @@ background:#000;
 }
 
 .app{
-width:100%;
-height:100vh;
-border-radius:0;
+max-width:100%;
+height:100dvh;
 }
 
-.chat{
-padding-bottom:20px;
+.msg{
+max-width:85%;
 }
 
 }
@@ -368,18 +369,19 @@ padding-bottom:20px;
 
 <div class="chat" id="chat"></div>
 
-<!-- INPUT FOOTER -->
+<!-- INPUT -->
 
 <div class="input-area">
 
 <div class="input-box">
 
-<input 
-type="text" 
-id="input" 
+<input
+type="text"
+id="input"
 placeholder="Type message..."
 autocomplete="off"
->
+inputmode="text"
+/>
 
 </div>
 
@@ -431,28 +433,41 @@ let chatStarted=false;
 const chat=document.getElementById("chat");
 const input=document.getElementById("input");
 
+/* KEEP KEYBOARD OPEN */
+
+input.addEventListener("keydown",function(e){
+
+if(e.key==="Enter"){
+
+e.preventDefault();
+
+send();
+
+setTimeout(()=>{
+input.focus();
+},50);
+
+}
+
+});
+
 /* AUTO SCROLL */
 
 function scrollBottom(){
 
-setTimeout(()=>{
+requestAnimationFrame(()=>{
 
-chat.scrollTo({
-top:chat.scrollHeight,
-behavior:"smooth"
+chat.scrollTop=chat.scrollHeight;
+
 });
 
-},100);
-
 }
 
-/* ENTER KEY */
+/* MOBILE VIEWPORT FIX */
 
-input.addEventListener("keypress",function(e){
+window.addEventListener("resize",()=>{
 
-if(e.key==="Enter"){
-send();
-}
+scrollBottom();
 
 });
 
@@ -510,7 +525,7 @@ const enQuestions=[
 
 ];
 
-/* ADD MESSAGE */
+/* MESSAGE */
 
 function addMsg(msg,type){
 
@@ -520,7 +535,10 @@ div.className="msg "+type;
 
 div.innerHTML=
 msg+
-`<div class="time">${new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}</div>`;
+`<div class="time">${new Date().toLocaleTimeString([],{
+hour:'2-digit',
+minute:'2-digit'
+})}</div>`;
 
 chat.appendChild(div);
 
@@ -565,7 +583,9 @@ addMsg(`
 
 showLanguageButtons();
 
+setTimeout(()=>{
 input.focus();
+},300);
 
 };
 
@@ -657,9 +677,7 @@ I will help you with ADR Reporting.
 }
 
 setTimeout(()=>{
-
 askQuestion();
-
 },700);
 
 }
@@ -704,7 +722,7 @@ sendToSheet(data);
 
 }
 
-/* SHOW CHIPS */
+/* CHIPS */
 
 function showChips(arr){
 
@@ -732,7 +750,7 @@ scrollBottom();
 
 }
 
-/* HANDLE INPUT */
+/* INPUT HANDLE */
 
 function handleInput(v){
 
@@ -742,7 +760,7 @@ if(step>=qs.length) return;
 
 addMsg(v,"user");
 
-data["Q"+(step+1)]=v;
+data["step_"+step]=v;
 
 step++;
 
@@ -757,6 +775,9 @@ function send(){
 if(!chatStarted){
 
 addMsg("⚠️ Please select language first.","bot");
+
+input.focus();
+
 return;
 
 }
@@ -769,11 +790,15 @@ handleInput(val);
 
 input.value="";
 
+setTimeout(()=>{
+
 input.focus();
+
+},50);
 
 }
 
-/* VOICE INPUT */
+/* VOICE */
 
 function voiceInput(){
 
@@ -795,6 +820,10 @@ recog.onresult=(e)=>{
 let text=e.results[0][0].transcript;
 
 handleInput(text);
+
+setTimeout(()=>{
+input.focus();
+},50);
 
 };
 
@@ -837,29 +866,16 @@ speak(welcome);
 
 }
 
-/* DIAL OPTIONS */
+/* DIAL */
 
 function dialOption(n){
 
 if(n==1){
 
-let msg=
-`
+let msg=`
 ADR म्हणजे Adverse Drug Reaction.
 
 म्हणजे औषध घेतल्यानंतर होणारा अनपेक्षित दुष्परिणाम.
-
-काही औषधांमुळे चक्कर, खाज, मळमळ किंवा allergic reaction होऊ शकतो.
-
-प्रत्येक व्यक्तीची शरीररचना वेगळी असल्यामुळे औषधांचा परिणाम वेगळा होऊ शकतो.
-
-ADR reporting मुळे डॉक्टर आणि आरोग्य विभागाला औषध सुरक्षिततेबद्दल माहिती मिळते.
-
-यामुळे भविष्यातील गंभीर धोके टाळता येतात.
-
-औषध घेतल्यानंतर त्रास झाल्यास त्वरित डॉक्टरांचा सल्ला घ्यावा.
-
-धन्यवाद.
 `;
 
 document.getElementById("callInfo").innerHTML=
@@ -871,21 +887,8 @@ speak(msg);
 
 else if(n==2){
 
-let msg=
-`
+let msg=`
 Drug Drug Interaction म्हणजे दोन औषधे एकत्र घेतल्यामुळे होणारा परिणाम.
-
-यामुळे काही वेळा औषधांचा प्रभाव वाढू शकतो किंवा कमी होऊ शकतो.
-
-काही वेळा गंभीर दुष्परिणाम देखील होऊ शकतात.
-
-नेहमी डॉक्टरांच्या सल्ल्यानेच औषधे घ्यावीत.
-
-स्वतःहून औषधे घेणे टाळावे.
-
-ADR reporting मुळे भविष्यातील धोके टाळण्यास मदत होते.
-
-धन्यवाद.
 `;
 
 document.getElementById("callInfo").innerHTML=
@@ -897,21 +900,8 @@ speak(msg);
 
 else if(n==3){
 
-let msg=
-`
+let msg=`
 Suraksha Vigil हा एक आधुनिक ADR reporting project आहे.
-
-या project साठी Doctor Bhushan Pawar Sir यांचे अमूल्य मार्गदर्शन लाभले.
-
-त्यांच्या प्रेरणेमुळे आणि योग्य दिशेमुळे आम्ही हा bilingual chatbot आणि voice helpline based ADR reporting system तयार करू शकलो.
-
-Sir यांनी आम्हाला healthcare क्षेत्रामध्ये patient safety चे महत्त्व समजावून सांगितले.
-
-ग्रामीण आणि शहरी भागातील लोकांना सोप्या पद्धतीने ADR reporting करता यावी हा या project चा मुख्य उद्देश आहे.
-
-Doctor Bhushan Pawar Sir यांच्या मार्गदर्शनामुळेच हा project यशस्वीरित्या पूर्ण होऊ शकला.
-
-धन्यवाद.
 `;
 
 document.getElementById("callInfo").innerHTML=
@@ -936,6 +926,8 @@ document.getElementById("callScreen").style.display="none";
 /* GOOGLE SHEET */
 
 function sendToSheet(data){
+
+data.source="Chat Bot";
 
 fetch("https://script.google.com/macros/s/AKfycbwHdpYghnTnc0KDd8rGwldWbNvm--QZAJmhGeTFj1KyBQ0TnnXGJnnoEJFC7fYn1Z53xQ/exec",{
 
