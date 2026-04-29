@@ -1,192 +1,636 @@
+<!-- =========================
+SURAKSHA VIGIL BOT
+FINAL ADVANCED VERSION
+========================= -->
+
 <!DOCTYPE html>
 <html lang="mr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Suraksha Vigil AI | WhatsApp Pro</title>
-    <style>
-        :root { --wa-dark: #0b141a; --wa-green: #25d366; --wa-teal: #075e54; --wa-bg: #efeae2; --wa-msg-in: #ffffff; --wa-msg-out: #e7ffdb; }
-        * { box-sizing: border-box; font-family: 'Segoe UI', Helvetica, sans-serif; }
-        body, html { margin: 0; padding: 0; height: 100%; background: #d1d7db; overflow: hidden; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        /* WhatsApp Voice Call Interface */
-        #callOverlay {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: var(--wa-dark); z-index: 5000; display: none;
-            flex-direction: column; align-items: center; justify-content: space-between;
-            color: white; padding: 60px 20px;
-        }
-        .caller-avatar { width: 130px; height: 130px; border-radius: 50%; background: #505c64; display: flex; align-items: center; justify-content: center; font-size: 65px; border: 2px solid rgba(255,255,255,0.2); position: relative; }
-        .pulse { position: absolute; width: 100%; height: 100%; border-radius: 50%; border: 3px solid var(--wa-green); animation: pulse-ring 2s infinite; }
-        @keyframes pulse-ring { 0% { transform: scale(1); opacity: 1; } 100% { transform: scale(1.6); opacity: 0; } }
-        
-        .status-text { color: var(--wa-green); font-weight: bold; letter-spacing: 1px; margin-top: 15px; }
-        .ai-text-display { width: 85%; background: rgba(255,255,255,0.08); border-radius: 12px; padding: 15px; text-align: center; font-size: 17px; min-height: 80px; }
+<title>Suraksha Vigil Bot</title>
 
-        .dial-pad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 20px; }
-        .key { width: 55px; height: 55px; border-radius: 50%; background: rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; font-weight: bold; cursor: pointer; border: 1px solid rgba(255,255,255,0.2); }
+<style>
 
-        /* WhatsApp Chat Interface */
-        .app-container { width: 100%; max-width: 500px; height: 100dvh; background: var(--wa-bg); margin: auto; display: flex; flex-direction: column; position: relative; }
-        .header { background: var(--wa-teal); color: white; padding: 10px 16px; display: flex; align-items: center; gap: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        .header img { width: 40px; height: 40px; border-radius: 50%; background: white; }
-        
-        .chat-window { flex: 1; overflow-y: auto; padding: 15px; background: url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png'); display: flex; flex-direction: column; }
-        .bubble { padding: 8px 12px; margin-bottom: 8px; border-radius: 8px; max-width: 85%; font-size: 15px; position: relative; box-shadow: 0 1px 1px rgba(0,0,0,0.1); }
-        .bot { background: var(--wa-msg-in); align-self: flex-start; border-top-left-radius: 0; }
-        .user { background: var(--wa-msg-out); align-self: flex-end; border-top-right-radius: 0; }
+body{
+margin:0;
+font-family:Arial;
+background:#111b21;
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+}
 
-        .input-area { background: #f0f0f0; padding: 8px; display: flex; align-items: center; gap: 8px; }
-        .input-box { flex: 1; background: white; border-radius: 25px; padding: 10px 15px; border: none; outline: none; }
-        .mic-btn { background: var(--wa-teal); color: white; border: none; width: 45px; height: 45px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; }
-        .recording { background: #ff3b30 !important; animation: blink 1s infinite; }
-        @keyframes blink { 50% { opacity: 0.6; } }
-    </style>
+/* APP */
+
+.app{
+width:430px;
+height:95vh;
+background:#efeae2;
+display:flex;
+flex-direction:column;
+overflow:hidden;
+border-radius:18px;
+box-shadow:0 0 25px rgba(0,0,0,.5);
+position:relative;
+}
+
+/* HEADER */
+
+.header{
+background:#075e54;
+padding:10px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+color:white;
+}
+
+.left{
+display:flex;
+align-items:center;
+}
+
+.dp{
+width:42px;
+height:42px;
+background:white;
+border-radius:50%;
+display:flex;
+justify-content:center;
+align-items:center;
+font-size:22px;
+margin-right:10px;
+}
+
+.icons{
+display:flex;
+gap:15px;
+font-size:20px;
+cursor:pointer;
+}
+
+/* CHAT */
+
+.chat{
+flex:1;
+overflow-y:auto;
+padding:10px;
+display:flex;
+flex-direction:column;
+background:#efeae2;
+}
+
+.msg{
+max-width:75%;
+padding:10px;
+border-radius:10px;
+margin:5px 0;
+font-size:14px;
+line-height:1.4;
+}
+
+.bot{
+background:white;
+align-self:flex-start;
+border-top-left-radius:0;
+}
+
+.user{
+background:#d9fdd3;
+align-self:flex-end;
+border-top-right-radius:0;
+}
+
+.time{
+font-size:10px;
+color:gray;
+margin-top:4px;
+text-align:right;
+}
+
+/* INPUT */
+
+.input-area{
+display:flex;
+padding:8px;
+background:#f0f2f5;
+}
+
+input{
+flex:1;
+padding:10px;
+border:none;
+border-radius:20px;
+outline:none;
+}
+
+button{
+border:none;
+cursor:pointer;
+}
+
+.send,.mic{
+width:42px;
+height:42px;
+border-radius:50%;
+background:#075e54;
+color:white;
+font-size:18px;
+margin-left:5px;
+}
+
+/* CHIPS */
+
+.chips{
+display:flex;
+flex-wrap:wrap;
+gap:8px;
+margin:6px 0;
+}
+
+.chip{
+background:#128c7e;
+color:white;
+padding:8px 14px;
+border-radius:18px;
+font-size:13px;
+border:none;
+cursor:pointer;
+transition:.2s;
+}
+
+.chip:hover{
+transform:scale(1.05);
+}
+
+/* CALL SCREEN */
+
+.call-screen{
+position:absolute;
+inset:0;
+background:#0b141a;
+color:white;
+display:none;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+padding:20px;
+text-align:center;
+z-index:100;
+}
+
+.call-avatar{
+width:110px;
+height:110px;
+border-radius:50%;
+background:#075e54;
+display:flex;
+justify-content:center;
+align-items:center;
+font-size:50px;
+margin-bottom:20px;
+animation:pulse 1.5s infinite;
+}
+
+@keyframes pulse{
+0%{transform:scale(1);}
+50%{transform:scale(1.05);}
+100%{transform:scale(1);}
+}
+
+.call-status{
+margin-top:10px;
+font-size:15px;
+color:#ccc;
+}
+
+/* DIAL PAD */
+
+.dialpad{
+display:grid;
+grid-template-columns:repeat(3,70px);
+gap:12px;
+margin-top:30px;
+}
+
+.dial-btn{
+width:70px;
+height:70px;
+border-radius:50%;
+background:#202c33;
+color:white;
+font-size:25px;
+border:none;
+}
+
+.end-call{
+margin-top:30px;
+background:red;
+color:white;
+padding:12px 25px;
+border-radius:25px;
+font-size:16px;
+}
+
+</style>
 </head>
+
 <body>
 
-<div class="app-container">
-    <!-- Voice Call Screen -->
-    <div id="callOverlay">
-        <div class="caller-profile">
-            <center>
-                <div class="caller-avatar"><div class="pulse"></div>🛡️</div>
-                <h2>Suraksha Vigil AI</h2>
-                <div class="status-text" id="callStatus">WhatsApp Audio Call...</div>
-            </center>
-        </div>
+<div class="app">
 
-        <div class="ai-text-display" id="aiTalk">कॉल जोडला जात आहे...</div>
+<!-- HEADER -->
 
-        <div class="dial-pad">
-            <div class="key" onclick="pressKey('1')">1</div>
-            <div class="key" onclick="pressKey('2')">2</div>
-            <div class="key" onclick="pressKey('3')">3</div>
-            <div class="key" onclick="pressKey('4')">4</div>
-        </div>
+<div class="header">
 
-        <button onclick="endCall()" style="background:#ff3b30; border:none; width:65px; height:65px; border-radius:50%; display:flex; align-items:center; justify-content:center; cursor:pointer;">
-            <svg width="30" height="30" viewBox="0 0 24 24" fill="white"><path d="M12 9c-1.6 0-3.15.25-4.6.72v3.1c0 .39-.23.74-.56.9-.98.49-1.87 1.12-2.66 1.85-.18.18-.43.28-.7.28-.28 0-.53-.11-.71-.29L.29 13.08c-.18-.17-.29-.42-.29-.7 0-.28.11-.53.29-.71C3.34 8.78 7.46 7 12 7s8.66 1.78 11.71 4.67c.18.18.29.43.29.71 0 .28-.11.53-.29.71l-2.48 2.48c-.18.18-.43.29-.71.29-.27 0-.52-.11-.7-.28-.79-.74-1.69-1.36-2.67-1.85-.33-.16-.56-.5-.56-.9v-3.1C15.15 9.25 13.6 9 12 9z"/></svg>
-        </button>
-    </div>
+<div class="left">
 
-    <!-- Main Chat Header -->
-    <div class="header">
-        <div style="font-size: 20px;">←</div>
-        <div style="background:white; width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:20px;">🛡️</div>
-        <div style="flex:1;"><b>Suraksha Vigil AI</b><br><small>Online</small></div>
-        <div onclick="startCall()" style="cursor:pointer; font-size:22px;">📞</div>
-    </div>
+<div class="dp">🛡️</div>
 
-    <div class="chat-window" id="chat">
-        <div class="bubble bot">नमस्कार! मी सुरक्षा विजिल AI आहे. औषध दुष्परिणामांची नोंद करण्यासाठी वर दिलेल्या कॉल बटणावर क्लिक करा किंवा येथे मेसेज करा.</div>
-    </div>
-
-    <div class="input-area">
-        <input type="text" id="msgInput" class="input-box" placeholder="मेसेज टाईप करा...">
-        <button id="micBtn" class="mic-btn" onclick="toggleSpeech()">🎤</button>
-    </div>
+<div>
+<b>Suraksha Vigil Bot</b><br>
+<small>online</small>
 </div>
 
-<audio id="ringtone" src="https://www.soundjay.com/phone/phone-calling-1.mp3" loop></audio>
+</div>
+
+<div class="icons">
+<span onclick="startCall()">📞</span>
+</div>
+
+</div>
+
+<!-- CHAT -->
+
+<div class="chat" id="chat"></div>
+
+<!-- INPUT -->
+
+<div class="input-area">
+
+<input type="text" id="input" placeholder="Type message...">
+
+<button class="send" onclick="send()">➤</button>
+
+<button class="mic" onclick="voiceInput()">🎤</button>
+
+</div>
+
+<!-- CALL UI -->
+
+<div class="call-screen" id="callScreen">
+
+<div class="call-avatar">🛡️</div>
+
+<h2>Suraksha Vigil Helpline</h2>
+
+<div class="call-status" id="callText">
+Connecting...
+</div>
+
+<!-- DIAL PAD -->
+
+<div class="dialpad">
+
+<button class="dial-btn" onclick="menuOption(1)">1</button>
+
+<button class="dial-btn" onclick="menuOption(2)">2</button>
+
+<button class="dial-btn" onclick="menuOption(3)">3</button>
+
+<button class="dial-btn" onclick="menuOption(4)">4</button>
+
+<button class="dial-btn" onclick="menuOption(5)">5</button>
+
+</div>
+
+<button class="end-call" onclick="endCall()">End Call</button>
+
+</div>
+
+</div>
 
 <script>
-    let step = -1;
-    let reportData = {};
-    const questions = [
-        "तुमची ओळख काय आहे? (उदा. रुग्ण किंवा डॉक्टर)", "तुमचे शहर सांगा.", "रुग्णाचे नाव काय आहे?", 
-        "वय किती आहे?", "लिंग सांगा.", "औषधाचे नाव काय?", "काय त्रास झाला?", "त्रास किती गंभीर होता?"
-    ];
 
-    const ring = document.getElementById("ringtone");
-    const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-    recognition.lang = 'mr-IN';
+/* VARIABLES */
 
-    function speak(text, callback) {
-        window.speechSynthesis.cancel();
-        let m = new SpeechSynthesisUtterance(text);
-        m.lang = 'mr-IN'; m.rate = 0.95; m.volume = 1; m.pitch = 1;
-        document.getElementById("aiTalk").innerText = text;
-        m.onend = () => { if(callback) callback(); };
-        window.speechSynthesis.speak(m);
-    }
+let lang="mr";
+let step=0;
+let mode="chat";
 
-    function startCall() {
-        document.getElementById("callOverlay").style.display = "flex";
-        speak("सुरक्षा विजिल हेल्पलाइनमध्ये आपले स्वागत आहे. माहितीसाठी १, २ किंवा ३ दाबा. ADR रिपोर्टिंगसाठी ४ दाबा.");
-    }
+const chat=document.getElementById("chat");
 
-    function pressKey(n) {
-        if(n === '1') speak("ए डी आर रिपोर्टिंगमुळे आपण औषधांना अधिक सुरक्षित बनवू शकतो.");
-        if(n === '2') speak("रिपोर्ट केल्यामुळे भविष्यातील धोके टाळता येतात.");
-        if(n === '3') speak("हा प्रकल्प डॉक्टर भूषण पवार सर यांच्या मार्गदर्शनाखाली तयार करण्यात आला आहे. त्यांचे मार्गदर्शन औषध सुरक्षेसाठी अत्यंत मोलाचे आहे.");
-        if(n === '4') {
-            ring.play();
-            document.getElementById("callStatus").innerText = "CONNECTING...";
-            speak("तुमचा कॉल कनेक्ट केला जात आहे, कृपया ओळीवर रहा...", () => {
-                ring.pause();
-                document.getElementById("callOverlay").style.display = "none";
-                startReporting();
-            });
-        }
-    }
+/* QUESTIONS */
 
-    function startReporting() {
-        step = 0;
-        botMsg(questions[step]);
-        speak(questions[step]);
-    }
+const questions=[
 
-    function toggleSpeech() {
-        const btn = document.getElementById("micBtn");
-        if(btn.classList.contains("recording")) {
-            recognition.stop();
-            btn.classList.remove("recording");
-        } else {
-            recognition.start();
-            btn.classList.add("recording");
-        }
-    }
+"तुम्ही कोण आहात?",
 
-    recognition.onresult = (event) => {
-        const text = event.results[0][0].transcript;
-        document.getElementById("msgInput").value = text;
-        processInput(text);
-        document.getElementById("micBtn").classList.remove("recording");
-    };
+"तुमचे गाव कोणते?",
 
-    function processInput(text) {
-        userMsg(text);
-        reportData["Q" + step] = text;
-        step++;
-        if(step < questions.length) {
-            setTimeout(() => {
-                botMsg(questions[step]);
-                speak(questions[step]);
-            }, 800);
-        } else {
-            let fin = "धन्यवाद! तुमची माहिती सुरक्षितपणे नोंदवण्यात आली आहे.";
-            botMsg(fin); speak(fin);
-            sendToSheet();
-        }
-    }
+"रुग्णाचे नाव काय आहे?",
 
-    function botMsg(t) {
-        let d = document.createElement("div"); d.className = "bubble bot"; d.innerText = t;
-        document.getElementById("chat").appendChild(d); scroll();
-    }
-    function userMsg(t) {
-        let d = document.createElement("div"); d.className = "bubble user"; d.innerText = t;
-        document.getElementById("chat").appendChild(d); scroll();
-    }
-    function scroll() { let c = document.getElementById("chat"); c.scrollTop = c.scrollHeight; }
-    function endCall() { document.getElementById("callOverlay").style.display = "none"; window.speechSynthesis.cancel(); ring.pause(); }
+"वय किती आहे?",
 
-    function sendToSheet() {
-        fetch("YOUR_APPS_SCRIPT_URL", {
-            method: "POST", mode: "no-cors", body: JSON.stringify(reportData)
-        });
-    }
+"लिंग काय आहे?",
+
+"कोणते औषध घेतले होते?",
+
+"काय त्रास झाला?",
+
+"कधी सुरू झाला?",
+
+"त्रास किती गंभीर होता?",
+
+"हॉस्पिटलला जावे लागले का?"
+
+];
+
+/* MESSAGE */
+
+function addMsg(msg,type){
+
+let d=document.createElement("div");
+
+d.className="msg "+type;
+
+d.innerHTML=msg+`<div class='time'>${new Date().toLocaleTimeString()}</div>`;
+
+chat.appendChild(d);
+
+chat.scrollTop=chat.scrollHeight;
+
+}
+
+/* SPEAK */
+
+function speak(text){
+
+let s=new SpeechSynthesisUtterance(text);
+
+s.lang="mr-IN";
+
+speechSynthesis.speak(s);
+
+}
+
+/* START */
+
+window.onload=()=>{
+
+addMsg("नमस्कार 👋<br><br>Suraksha Vigil Bot मध्ये तुमचे स्वागत आहे.<br><br>ADR reporting साठी खालील पर्याय वापरा.","bot");
+
+showChips(["ADR म्हणजे काय?","ADR reporting चे फायदे","Project माहिती","Voice ADR Reporting"]);
+
+}
+
+/* CHIPS */
+
+function showChips(arr){
+
+let wrap=document.createElement("div");
+
+wrap.className="chips";
+
+arr.forEach(x=>{
+
+let b=document.createElement("button");
+
+b.className="chip";
+
+b.innerText=x;
+
+b.onclick=()=>chipAction(x);
+
+wrap.appendChild(b);
+
+});
+
+chat.appendChild(wrap);
+
+}
+
+/* CHIP ACTION */
+
+function chipAction(x){
+
+addMsg(x,"user");
+
+if(x==="ADR म्हणजे काय?"){
+
+let msg="ADR म्हणजे औषध घेतल्यानंतर होणारा अनपेक्षित त्रास किंवा दुष्परिणाम. ADR reporting मुळे औषध सुरक्षितता वाढते आणि भविष्यातील गंभीर धोके टाळता येतात.";
+
+addMsg(msg,"bot");
+
+speak(msg);
+
+}
+
+else if(x==="ADR reporting चे फायदे"){
+
+let msg="ADR reporting मुळे डॉक्टर आणि आरोग्य विभागाला औषधांचे दुष्परिणाम समजतात. त्यामुळे रुग्णांची सुरक्षितता वाढते, नवीन चेतावणी देता येते आणि गंभीर परिणाम टाळता येतात.";
+
+addMsg(msg,"bot");
+
+speak(msg);
+
+}
+
+else if(x==="Project माहिती"){
+
+let msg="Suraksha Vigil हा आधुनिक ADR reporting project आहे. या project साठी Doctor Bhushan Pawar Sir यांनी आम्हाला अमूल्य मार्गदर्शन केले. त्यांच्या प्रेरणेमुळे आणि योग्य दिशेमुळे आम्ही ADR reporting साठी एक स्मार्ट voice आणि chatbot आधारित portal तयार करू शकलो. औषध सुरक्षिततेबद्दल जनजागृती करणे आणि ADR reporting अधिक सोपी करणे हे या project चे मुख्य उद्दिष्ट आहे.";
+
+addMsg(msg,"bot");
+
+speak(msg);
+
+}
+
+else if(x==="Voice ADR Reporting"){
+
+startCall();
+
+}
+
+}
+
+/* SEND */
+
+function send(){
+
+let v=input.value.trim();
+
+if(!v)return;
+
+addMsg(v,"user");
+
+input.value="";
+
+}
+
+/* VOICE INPUT */
+
+function voiceInput(){
+
+let r=new webkitSpeechRecognition();
+
+r.lang="mr-IN";
+
+r.start();
+
+r.onresult=e=>{
+
+let text=e.results[0][0].transcript;
+
+addMsg(text,"user");
+
+};
+
+}
+
+/* CALL START */
+
+function startCall(){
+
+mode="call";
+
+document.getElementById("callScreen").style.display="flex";
+
+document.getElementById("callText").innerText="Calling Suraksha Vigil Helpline...";
+
+setTimeout(()=>{
+
+let msg="नमस्कार. Suraksha Vigil Helpline मध्ये तुमचे स्वागत आहे. ADR म्हणजे काय हे जाणून घेण्यासाठी 1 दाबा. ADR reporting चे फायदे जाणून घेण्यासाठी 2 दाबा. Project माहिती साठी 3 दाबा. Voice ADR reporting साठी 4 दाबा. पुन्हा सर्व पर्याय ऐकण्यासाठी 5 दाबा.";
+
+document.getElementById("callText").innerText="Voice Assistant Active";
+
+speak(msg);
+
+},2000);
+
+}
+
+/* MENU */
+
+function menuOption(n){
+
+if(n==1){
+
+let msg="ADR म्हणजे Adverse Drug Reaction. म्हणजे औषध घेतल्यानंतर शरीरावर होणारा अनपेक्षित दुष्परिणाम. ADR reporting मुळे औषध सुरक्षितता वाढते आणि भविष्यातील गंभीर त्रास टाळता येतो.";
+
+document.getElementById("callText").innerText=msg;
+
+speak(msg);
+
+}
+
+else if(n==2){
+
+let msg="ADR reporting चे अनेक फायदे आहेत. त्यामुळे औषधांचे दुष्परिणाम लवकर ओळखता येतात, डॉक्टरांना योग्य माहिती मिळते, रुग्णांची सुरक्षितता वाढते आणि आरोग्य व्यवस्थेमध्ये सुधारणा होते.";
+
+document.getElementById("callText").innerText=msg;
+
+speak(msg);
+
+}
+
+else if(n==3){
+
+let msg="Suraksha Vigil हा एक innovative ADR reporting project आहे. या project साठी Doctor Bhushan Pawar Sir यांनी आम्हाला उत्कृष्ट मार्गदर्शन केले. त्यांच्या अनुभवामुळे आणि प्रेरणेमुळे आम्ही voice based आणि chatbot based ADR reporting system तयार करण्यात यशस्वी झालो. औषध सुरक्षिततेबद्दल जागरूकता निर्माण करणे हे या project चे मुख्य उद्दिष्ट आहे.";
+
+document.getElementById("callText").innerText=msg;
+
+speak(msg);
+
+}
+
+else if(n==4){
+
+document.getElementById("callText").innerText="Connecting to ADR Reporting Agent...";
+
+speak("कृपया थांबा. तुमची कॉल आमच्या ADR reporting agent शी जोडली जात आहे.");
+
+setTimeout(()=>{
+
+step=0;
+
+askCallQuestion();
+
+},4000);
+
+}
+
+else if(n==5){
+
+startCall();
+
+}
+
+}
+
+/* CALL QUESTIONS */
+
+function askCallQuestion(){
+
+if(step>=questions.length){
+
+let endmsg="तुमचा ADR report यशस्वीरित्या नोंदवला गेला आहे. धन्यवाद.";
+
+document.getElementById("callText").innerText=endmsg;
+
+speak(endmsg);
+
+return;
+
+}
+
+let q=questions[step];
+
+document.getElementById("callText").innerText=q;
+
+speak(q);
+
+let r=new webkitSpeechRecognition();
+
+r.lang="mr-IN";
+
+r.start();
+
+r.onresult=e=>{
+
+let ans=e.results[0][0].transcript;
+
+addMsg(q,"bot");
+
+addMsg(ans,"user");
+
+step++;
+
+setTimeout(()=>{
+
+askCallQuestion();
+
+},1000);
+
+};
+
+}
+
+/* END */
+
+function endCall(){
+
+speechSynthesis.cancel();
+
+document.getElementById("callScreen").style.display="none";
+
+mode="chat";
+
+}
+
 </script>
 
 </body>
