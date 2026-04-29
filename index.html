@@ -372,6 +372,7 @@ End Call
 let lang="";
 let step=0;
 let data={};
+let chatStarted=false;
 
 const chat=document.getElementById("chat");
 
@@ -538,7 +539,11 @@ chat.appendChild(wrap);
 
 function startChat(){
 
+chatStarted=true;
+
 step=0;
+
+data={};
 
 if(lang==="mr"){
 
@@ -640,11 +645,15 @@ wrap.appendChild(b);
 
 chat.appendChild(wrap);
 
+chat.scrollTop=chat.scrollHeight;
+
 }
 
 /* HANDLE INPUT */
 
 function handleInput(v){
+
+if(step>=11) return;
 
 addMsg(v,"user");
 
@@ -660,6 +669,13 @@ askQuestion();
 
 function send(){
 
+if(!chatStarted){
+
+addMsg("⚠️ Please select language first.","bot");
+return;
+
+}
+
 let val=document.getElementById("input").value.trim();
 
 if(!val) return;
@@ -673,6 +689,13 @@ document.getElementById("input").value="";
 /* VOICE INPUT */
 
 function voiceInput(){
+
+if(!chatStarted){
+
+addMsg("⚠️ Please select language first.","bot");
+return;
+
+}
 
 let recog=new webkitSpeechRecognition();
 
@@ -811,7 +834,7 @@ Suraksha Vigil हा एक आधुनिक ADR reporting project आहे.
 
 या project साठी Doctor Bhushan Pawar Sir यांचे अमूल्य मार्गदर्शन लाभले.
 
-त्यांच्या प्रेरणेमुळे आणि योग्य दिशेमुळे आम्ही हा bilingual chatbot आणि voice helpline आधारित ADR reporting system तयार करू शकलो.
+त्यांच्या प्रेरणेमुळे आणि योग्य दिशेमुळे आम्ही हा bilingual chatbot आणि voice helpline based ADR reporting system तयार करू शकलो.
 
 Sir यांनी आम्हाला healthcare क्षेत्रामध्ये patient safety चे महत्त्व समजावून सांगितले.
 
@@ -854,6 +877,10 @@ function sendToSheet(data){
 fetch("https://script.google.com/macros/s/AKfycbwHdpYghnTnc0KDd8rGwldWbNvm--QZAJmhGeTFj1KyBQ0TnnXGJnnoEJFC7fYn1Z53xQ/exec",{
 
 method:"POST",
+
+headers:{
+"Content-Type":"application/json"
+},
 
 body:JSON.stringify(data)
 
